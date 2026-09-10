@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: bazaaro
+    env: node
+    plan: free
+    region: singapore
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ZAPUPI_KEY_ID
+        sync: false
+      - key: ZAPUPI_ENV
+        value: sandbox
+      - key: JWT_SECRET
+        generateValue: true
