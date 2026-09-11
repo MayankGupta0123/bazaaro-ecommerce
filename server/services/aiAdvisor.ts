@@ -439,12 +439,12 @@ ${groundingText}`;
         parts: [{ text: m.content }],
       }));
 
-      // Call Gemini 3.6 Flash with timeout
+      // Call Gemini 3.5 Flash-Lite with timeout
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 9000);
 
       const response = await client.models.generateContent({
-        model: 'gemini-3.6-flash',
+        model: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
         contents: historyTurns,
         config: {
           systemInstruction,

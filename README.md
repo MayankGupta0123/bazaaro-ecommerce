@@ -38,7 +38,7 @@ An enterprise-grade full-stack Indian electronics e-commerce web application bui
 - **Backend**: Node.js, Express.js, esbuild.
 - **Database**: MongoDB Atlas via Mongoose.
 - **Authentication**: JWT (JSON Web Tokens), bcryptjs password hashing.
-- **AI / LLM**: Google Gemini 3.6 Flash (`@google/genai`).
+- **AI / LLM**: Google Gemini 3.5 Flash-Lite (`@google/genai`).
 - **Payment Gateway**: ZapUPI UPI Gateway Integration.
 
 ---
