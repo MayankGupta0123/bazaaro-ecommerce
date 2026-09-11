@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+@theme {
+  --color-bazaaro-dark: #0B0D0F;
+  --color-bazaaro-surface: #121518;
+  --color-bazaaro-surface-hover: #181C20;
+  --color-bazaaro-border: #262A2E;
+  --color-bazaaro-cyan: #5EEAD4;
+  --color-bazaaro-violet: #A78BFA;
+}
+
+@layer base {
+  /* Webkit scrollbar for dark theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-bazaaro-dark);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-bazaaro-border);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-bazaaro-cyan);
+  }
+}

@@ -13,6 +13,7 @@ import { AuthModal } from './components/AuthModal';
 import { AdminDashboard } from './components/AdminDashboard';
 import { AdminAccessDenied } from './components/AdminAccessDenied';
 import { Footer } from './components/Footer';
+import { AiDostFloatingButton } from './components/AiDostFloatingButton';
 
 import { PRODUCTS } from './data/products';
 import { Product, CartItem, Order, FilterOptions, CategoryKey, AuthUser } from './types';
@@ -557,6 +558,7 @@ export default function App() {
   // Fetch live products from MongoDB API
   useEffect(() => {
     const params = new URLSearchParams();
+    params.append('limit', '100');
     if (filters.category && filters.category !== 'all') params.append('category', filters.category);
     if (filters.brand) params.append('brand', filters.brand);
     if (filters.searchQuery) params.append('search', filters.searchQuery);
@@ -684,7 +686,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 font-sans selection:bg-amber-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-bazaaro-dark text-slate-200 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 text-xs font-semibold border border-slate-700 animate-in fade-in slide-in-from-bottom-2">
@@ -719,75 +721,65 @@ export default function App() {
       <FestiveBanner />
 
       {/* Main Catalog View */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 pt-6 pb-12 space-y-6">
         {/* Category & Filter Navigation */}
-        <CategoryFilterBar
-          filters={filters}
-          onFilterChange={setFilters}
-          availableBrands={availableBrands}
-          totalResults={displayedProducts.length}
-        />
+        <div id="category-section" className="scroll-mt-24">
+          <CategoryFilterBar
+            filters={filters}
+            onFilterChange={setFilters}
+            availableBrands={availableBrands}
+            totalResults={displayedProducts.length}
+          />
+        </div>
 
         {/* Product Grid */}
-        {displayedProducts.length === 0 ? (
-          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-xs space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
-              <ShoppingBag className="w-8 h-8" />
+        <div id="product-grid" className="scroll-mt-24">
+          {displayedProducts.length === 0 ? (
+            <div className="bg-bazaaro-surface rounded-2xl p-12 text-center border border-bazaaro-border shadow-xs space-y-3">
+              <div className="w-16 h-16 rounded-2xl bg-slate-800 text-slate-300 flex items-center justify-center mx-auto">
+                <ShoppingBag className="w-8 h-8" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-100">No Products Found</h3>
+              <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                We couldn't find any products matching your filter criteria. Try searching for "smartphones", "laptops", or reset filters.
+              </p>
+              <button
+                onClick={() =>
+                  setFilters({
+                    category: 'all',
+                    searchQuery: '',
+                    brand: '',
+                    minPrice: 0,
+                    maxPrice: 200000,
+                    sortBy: 'featured',
+                    onlyInStock: false,
+                    onlyMadeInIndia: false,
+                  })
+                }
+                className="px-4 py-2 bg-slate-100 hover:bg-white text-slate-900 font-semibold text-xs rounded-xl transition-colors cursor-pointer"
+              >
+                Reset All Filters
+              </button>
             </div>
-            <h3 className="text-lg font-bold text-slate-800">No Electronics Found</h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              We couldn't find any gadgets matching your filter criteria. Try searching for "smartphones", "laptops", or clear filters.
-            </p>
-            <button
-              onClick={() =>
-                setFilters({
-                  category: 'all',
-                  searchQuery: '',
-                  brand: '',
-                  minPrice: 0,
-                  maxPrice: 200000,
-                  sortBy: 'featured',
-                  onlyInStock: false,
-                  onlyMadeInIndia: false,
-                })
-              }
-              className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs rounded-xl transition-colors cursor-pointer"
-            >
-              Reset All Filters
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {displayedProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                isWishlisted={wishlist.some((p) => p.id === product.id)}
-                onToggleWishlist={handleToggleWishlist}
-                onAddToCart={handleAddToCart}
-                onSelectProduct={handleSelectProduct}
-              />
-            ))}
-          </div>
-        )}
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              {displayedProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isWishlisted={wishlist.some((p) => p.id === product.id)}
+                  onToggleWishlist={handleToggleWishlist}
+                  onAddToCart={handleAddToCart}
+                  onSelectProduct={handleSelectProduct}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </main>
 
-      {/* Floating AI Dost Button (Always reachable for instant shopping guidance) */}
-      <div className="fixed bottom-6 right-6 z-30">
-        <button
-          onClick={() => setIsAiChatOpen(true)}
-          className="flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-black text-xs rounded-full shadow-xl shadow-amber-500/25 border-2 border-white hover:scale-105 transition-all cursor-pointer group"
-        >
-          <div className="relative">
-            <Sparkles className="w-5 h-5 text-white" />
-            <span className="animate-ping absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-400 opacity-75"></span>
-          </div>
-          <div className="text-left hidden sm:block">
-            <div className="text-white text-[11px] leading-tight font-extrabold">Bazaaro AI Dost</div>
-            <div className="text-[10px] text-amber-100 font-medium">Ask specs & deals</div>
-          </div>
-        </button>
-      </div>
+      {/* Floating AI Dost Button (Distinctive Premium AI Assistant Presence) */}
+      <AiDostFloatingButton onClick={() => setIsAiChatOpen(true)} />
 
       {/* Drawers & Modals */}
       <ProductModal

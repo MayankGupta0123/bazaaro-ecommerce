@@ -210,27 +210,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+      <div className="bg-bazaaro-surface rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-700/50 overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white">
-          <div className="flex items-center gap-2.5">
-            <BazaaroLogo size="sm" iconOnly theme="dark" />
+        <div className="px-6 py-5 border-b border-slate-700/50 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <BazaaroLogo size="sm" iconOnly />
             <div>
-              <h3 className="text-sm font-bold">Bazaaro Secure Checkout</h3>
-              <p className="text-[10px] text-slate-300">ZapUPI Payment Gateway (INR ₹)</p>
+              <h3 className="text-sm font-semibold text-slate-100">Secure Checkout</h3>
+              <p className="text-[10px] text-slate-400 font-medium">Bazaaro Official Payments (INR ₹)</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 bg-slate-800 border border-slate-700 text-amber-300 text-[11px] font-semibold px-2.5 py-1 rounded-lg">
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-              <span>ZapUPI Verified</span>
+            <div className="flex items-center gap-1.5 bg-slate-800/50 border border-slate-700 text-slate-300 text-[11px] font-semibold px-2.5 py-1 rounded-md">
+              <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+              <span>Bank-grade Security</span>
             </div>
             {step !== 'processing' && (
               <button
                 onClick={onClose}
-                className="text-slate-400 hover:text-white p-1 transition-colors cursor-pointer"
+                className="text-slate-500 hover:text-slate-300 hover:bg-slate-800 p-1.5 rounded-full transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -239,18 +239,18 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         </div>
 
         {/* Content Body */}
-        <div className="p-6 overflow-y-auto flex-1 space-y-5">
+        <div className="p-6 overflow-y-auto flex-1 space-y-6 bg-bazaaro-surface">
           {checkoutError && (
-            <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-2xl flex items-center justify-between gap-2">
+            <div className="p-4 bg-rose-50 border border-rose-100 text-rose-600 text-xs rounded-xl flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
-                <span>{checkoutError}</span>
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
+                <span className="font-medium">{checkoutError}</span>
               </div>
               {!token && onRequireAuth && (
                 <button
                   type="button"
                   onClick={onRequireAuth}
-                  className="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs shrink-0 cursor-pointer"
+                  className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg text-xs shrink-0 cursor-pointer transition-colors"
                 >
                   Sign In
                 </button>
@@ -260,29 +260,29 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
           {/* STEP 1: Address */}
           {step === 'address' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-slate-900 text-white text-xs flex items-center justify-center">1</span>
-                  Delivery Address in India
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-700/50 pb-3">
+                <div className="font-semibold text-slate-100 text-sm flex items-center gap-3">
+                  <span className="w-5 h-5 rounded-full bg-slate-800 text-slate-300 text-xs flex items-center justify-center font-medium">1</span>
+                  Delivery Details
                 </div>
-                <span className="text-xs text-slate-400">Step 1 of 2</span>
+                <span className="text-xs text-slate-500 font-medium">Step 1 of 2</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Full Name</label>
+                  <label className="block font-medium text-slate-400 mb-1.5 text-xs">Full Name</label>
                   <input
                     type="text"
                     value={address.fullName}
                     onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 outline-hidden"
+                    className="w-full px-4 py-2 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Mobile (+91)</label>
+                  <label className="block font-medium text-slate-400 mb-1.5 text-xs">Phone Number (+91)</label>
                   <div className="flex">
-                    <span className="inline-flex items-center px-2.5 rounded-l-xl border border-r-0 border-slate-300 bg-slate-100 text-slate-500 text-xs">
+                    <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-700 bg-slate-800/30 text-slate-500 text-sm">
                       +91
                     </span>
                     <input
@@ -290,83 +290,83 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       maxLength={10}
                       value={address.phone}
                       onChange={(e) => setAddress({ ...address, phone: e.target.value.replace(/\D/g, '') })}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-r-xl focus:border-amber-500 outline-hidden"
+                      className="w-full px-4 py-2 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-r-xl focus:border-slate-500 outline-hidden transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block font-semibold text-slate-700 mb-1">Flat / House No., Apartment, Street</label>
+                  <label className="block font-medium text-slate-400 mb-1.5 text-xs">Street Address / Area</label>
                   <input
                     type="text"
                     value={address.street}
                     onChange={(e) => setAddress({ ...address, street: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 outline-hidden"
+                    className="w-full px-4 py-2 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">City</label>
+                  <label className="block font-medium text-slate-400 mb-1.5 text-xs">City</label>
                   <input
                     type="text"
                     value={address.city}
                     onChange={(e) => setAddress({ ...address, city: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 outline-hidden"
+                    className="w-full px-4 py-2 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">PIN Code (6 digits)</label>
+                  <label className="block font-medium text-slate-400 mb-1.5 text-xs">PIN Code (6 digits)</label>
                   <input
                     type="text"
                     maxLength={6}
                     value={address.pincode}
                     onChange={(e) => setAddress({ ...address, pincode: e.target.value.replace(/\D/g, '') })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 outline-hidden"
+                    className="w-full px-4 py-2 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">State</label>
+                  <label className="block font-medium text-slate-400 mb-1.5 text-xs">State</label>
                   <select
                     value={address.state}
                     onChange={(e) => setAddress({ ...address, state: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 outline-hidden bg-white"
+                    className="w-full px-4 py-2 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors cursor-pointer"
                   >
                     {INDIAN_STATES.map((s) => (
-                      <option key={s} value={s}>{s}</option>
+                      <option key={s} value={s} className="bg-slate-800">{s}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Landmark (Optional)</label>
+                  <label className="block font-medium text-slate-400 mb-1.5 text-xs">Landmark (Optional)</label>
                   <input
                     type="text"
                     value={address.landmark || ''}
                     onChange={(e) => setAddress({ ...address, landmark: e.target.value })}
                     placeholder="Near Metro, Temple, etc."
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 outline-hidden"
+                    className="w-full px-4 py-2 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors"
                   />
                 </div>
               </div>
 
               {/* Order preview bar */}
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between text-xs">
+              <div className="p-4 bg-slate-800/30 rounded-xl border border-slate-700/50 flex items-center justify-between text-sm">
                 <div>
                   <span className="text-slate-500">Order Total:</span>{' '}
-                  <strong className="text-slate-900 text-sm">{formatINR(total)}</strong>
+                  <strong className="text-slate-100 font-semibold">{formatINR(total)}</strong>
                 </div>
-                <div className="flex items-center gap-1 text-emerald-600 font-medium">
-                  <Truck className="w-3.5 h-3.5" /> Express Dispatch
+                <div className="flex items-center gap-2 text-slate-400 font-medium text-xs">
+                  <Truck className="w-4 h-4" /> Standard Delivery
                 </div>
               </div>
 
               <button
                 onClick={() => setStep('payment')}
-                className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="w-full py-3.5 px-4 rounded-xl bg-slate-100 hover:bg-white text-slate-900 font-semibold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
-                <span>Continue to ZapUPI Payment</span>
+                <span>Continue to Payment</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -374,87 +374,87 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
           {/* STEP 2: Payment */}
           {step === 'payment' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <div className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-slate-900 text-white text-xs flex items-center justify-center">2</span>
-                  Select Payment Method (ZapUPI Gateway)
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-700/50 pb-3">
+                <div className="font-semibold text-slate-100 text-sm flex items-center gap-3">
+                  <span className="w-5 h-5 rounded-full bg-slate-800 text-slate-300 text-xs flex items-center justify-center font-medium">2</span>
+                  Select Payment Method
                 </div>
                 <button
                   onClick={() => setStep('address')}
-                  className="text-xs text-amber-600 font-semibold hover:underline"
+                  className="text-xs text-slate-400 font-medium hover:text-slate-200 transition-colors"
                 >
                   Edit Address
                 </button>
               </div>
 
               {/* Amount bar */}
-              <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 flex items-center justify-between">
+              <div className="p-5 rounded-xl bg-slate-800/30 border border-slate-700/50 flex items-center justify-between">
                 <div>
-                  <div className="text-xs text-slate-500">Payable Amount (INR)</div>
-                  <div className="text-2xl font-black text-slate-900">{formatINR(total)}</div>
+                  <div className="text-xs text-slate-400 font-medium mb-1">Amount to Pay (INR)</div>
+                  <div className="text-2xl font-semibold text-slate-100">{formatINR(total)}</div>
                 </div>
                 <div className="text-right">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-200 text-amber-900">
-                    <ShieldCheck className="w-3.5 h-3.5" /> ZapUPI Gateway
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-900/20 text-emerald-500 border border-emerald-500/30">
+                    <ShieldCheck className="w-4 h-4" /> Secure Payment
                   </span>
-                  <div className="text-[10px] text-slate-500 mt-1">256-Bit SSL Encrypted</div>
+                  <div className="text-[10px] text-slate-500 mt-2 font-medium">Powered by ZapUPI Gateway</div>
                 </div>
               </div>
 
               {/* Payment Methods Tabs */}
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {/* 1. UPI */}
                 <div
                   onClick={() => setPaymentMethod('razorpay_upi')}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                  className={`p-4 rounded-xl border transition-all cursor-pointer ${
                     paymentMethod === 'razorpay_upi'
-                      ? 'border-amber-500 bg-amber-50/20 ring-1 ring-amber-500/30'
-                      : 'border-slate-200 hover:border-slate-300'
+                      ? 'border-slate-500 bg-slate-800/50'
+                      : 'border-slate-700/50 bg-transparent hover:border-slate-600'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2.5">
-                      <Smartphone className="w-5 h-5 text-amber-600" />
+                    <div className="flex items-center gap-3">
+                      <Smartphone className={`w-5 h-5 ${paymentMethod === 'razorpay_upi' ? 'text-slate-200' : 'text-slate-500'}`} />
                       <div>
-                        <div className="text-xs font-bold text-slate-900">Instant UPI (Recommended)</div>
-                        <div className="text-[11px] text-slate-500">Google Pay, PhonePe, Paytm, BHIM</div>
+                        <div className="text-sm font-medium text-slate-200">UPI (Recommended)</div>
+                        <div className="text-xs text-slate-500 mt-0.5">Google Pay, PhonePe, Paytm, BHIM</div>
                       </div>
                     </div>
                     <input
                       type="radio"
                       checked={paymentMethod === 'razorpay_upi'}
                       onChange={() => setPaymentMethod('razorpay_upi')}
-                      className="accent-amber-600"
+                      className="accent-slate-200 w-4 h-4"
                     />
                   </div>
 
                   {paymentMethod === 'razorpay_upi' && (
-                    <div className="pt-3 border-t border-slate-100 space-y-3">
+                    <div className="pt-4 mt-2 border-t border-slate-700/50 space-y-4">
                       <div className="flex gap-2">
                         {(['gpay', 'phonepe', 'paytm'] as const).map((app) => (
                           <button
                             key={app}
                             type="button"
                             onClick={() => setSelectedUpiApp(app)}
-                            className={`flex-1 py-1.5 px-2 rounded-lg border text-xs font-semibold capitalize transition-all ${
+                            className={`flex-1 py-2 px-3 rounded-lg border text-xs font-semibold capitalize transition-all ${
                               selectedUpiApp === app
-                                ? 'border-amber-500 bg-white shadow-xs text-amber-900'
-                                : 'border-slate-200 bg-slate-50 text-slate-600'
+                                ? 'border-slate-500 bg-slate-700 text-slate-100'
+                                : 'border-slate-700 bg-slate-800/50 text-slate-400 hover:border-slate-600'
                             }`}
                           >
-                            {app === 'gpay' ? 'Google Pay' : app === 'phonepe' ? 'PhonePe' : 'Paytm UPI'}
+                            {app === 'gpay' ? 'Google Pay' : app === 'phonepe' ? 'PhonePe' : 'Paytm'}
                           </button>
                         ))}
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-medium text-slate-600 mb-1">Enter UPI ID (VPA)</label>
+                        <label className="block text-xs font-medium text-slate-400 mb-2">Enter UPI ID (VPA)</label>
                         <input
                           type="text"
                           value={upiVpa}
                           onChange={(e) => setUpiVpa(e.target.value)}
-                          className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg outline-hidden focus:border-amber-500 bg-white"
+                          className="w-full px-4 py-2 text-sm bg-slate-800 border border-slate-700 text-slate-200 rounded-lg outline-hidden focus:border-slate-500 transition-colors"
                         />
                       </div>
                     </div>
@@ -464,61 +464,61 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 {/* 2. Test Cards */}
                 <div
                   onClick={() => setPaymentMethod('razorpay_card')}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                  className={`p-4 rounded-xl border transition-all cursor-pointer ${
                     paymentMethod === 'razorpay_card'
-                      ? 'border-amber-500 bg-amber-50/20 ring-1 ring-amber-500/30'
-                      : 'border-slate-200 hover:border-slate-300'
+                      ? 'border-slate-500 bg-slate-800/50'
+                      : 'border-slate-700/50 bg-transparent hover:border-slate-600'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2.5">
-                      <CreditCard className="w-5 h-5 text-amber-600" />
+                    <div className="flex items-center gap-3">
+                      <CreditCard className={`w-5 h-5 ${paymentMethod === 'razorpay_card' ? 'text-slate-200' : 'text-slate-500'}`} />
                       <div>
-                        <div className="text-xs font-bold text-slate-900">Credit / Debit Card (Razorpay Test Card)</div>
-                        <div className="text-[11px] text-slate-500">Visa, Mastercard, RuPay, Maestro</div>
+                        <div className="text-sm font-medium text-slate-200">Credit / Debit Card</div>
+                        <div className="text-xs text-slate-500 mt-0.5">Visa, Mastercard, RuPay, Maestro</div>
                       </div>
                     </div>
                     <input
                       type="radio"
                       checked={paymentMethod === 'razorpay_card'}
                       onChange={() => setPaymentMethod('razorpay_card')}
-                      className="accent-amber-600"
+                      className="accent-slate-200 w-4 h-4"
                     />
                   </div>
 
                   {paymentMethod === 'razorpay_card' && (
-                    <div className="pt-3 border-t border-slate-100 space-y-2.5 text-xs">
-                      <div className="p-2 rounded-lg bg-slate-100 text-[11px] text-slate-600 flex items-center justify-between">
-                        <span>Razorpay Test Card pre-filled</span>
-                        <span className="font-mono font-bold">OTP: 123456</span>
+                    <div className="pt-4 mt-2 border-t border-slate-700/50 space-y-4">
+                      <div className="p-3 rounded-lg bg-emerald-900/10 border border-emerald-500/20 text-xs text-emerald-500 flex items-center justify-between font-medium">
+                        <span>Test Card pre-loaded</span>
+                        <span className="font-mono font-bold tracking-wider">OTP: 123456</span>
                       </div>
                       <div>
-                        <label className="block font-medium text-slate-600 mb-1">Card Number</label>
+                        <label className="block font-medium text-slate-400 mb-2 text-xs">Card Number</label>
                         <input
                           type="text"
                           value={cardNumber}
                           onChange={(e) => setCardNumber(e.target.value)}
-                          className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono bg-white"
+                          className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono text-sm outline-hidden focus:border-slate-500 transition-colors"
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block font-medium text-slate-600 mb-1">Valid Thru</label>
+                          <label className="block font-medium text-slate-400 mb-2 text-xs">Expiry Date</label>
                           <input
                             type="text"
                             value={cardExpiry}
                             onChange={(e) => setCardExpiry(e.target.value)}
-                            className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono bg-white"
+                            className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono text-sm outline-hidden focus:border-slate-500 transition-colors"
                           />
                         </div>
                         <div>
-                          <label className="block font-medium text-slate-600 mb-1">CVV</label>
+                          <label className="block font-medium text-slate-400 mb-2 text-xs">CVV</label>
                           <input
                             type="password"
                             maxLength={4}
                             value={cardCvv}
                             onChange={(e) => setCardCvv(e.target.value)}
-                            className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono bg-white"
+                            className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono text-sm outline-hidden focus:border-slate-500 transition-colors"
                           />
                         </div>
                       </div>
@@ -529,41 +529,41 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 {/* 3. Netbanking */}
                 <div
                   onClick={() => setPaymentMethod('razorpay_netbanking')}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                  className={`p-4 rounded-xl border transition-all cursor-pointer ${
                     paymentMethod === 'razorpay_netbanking'
-                      ? 'border-amber-500 bg-amber-50/20 ring-1 ring-amber-500/30'
-                      : 'border-slate-200 hover:border-slate-300'
+                      ? 'border-slate-500 bg-slate-800/50'
+                      : 'border-slate-700/50 bg-transparent hover:border-slate-600'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <Building className="w-5 h-5 text-amber-600" />
+                    <div className="flex items-center gap-3">
+                      <Building className={`w-5 h-5 ${paymentMethod === 'razorpay_netbanking' ? 'text-slate-200' : 'text-slate-500'}`} />
                       <div>
-                        <div className="text-xs font-bold text-slate-900">Netbanking</div>
-                        <div className="text-[11px] text-slate-500">HDFC, ICICI, SBI, Axis, Kotak</div>
+                        <div className="text-sm font-medium text-slate-200">Netbanking</div>
+                        <div className="text-xs text-slate-500 mt-0.5">HDFC, ICICI, SBI, Axis, Kotak</div>
                       </div>
                     </div>
                     <input
                       type="radio"
                       checked={paymentMethod === 'razorpay_netbanking'}
                       onChange={() => setPaymentMethod('razorpay_netbanking')}
-                      className="accent-amber-600"
+                      className="accent-slate-200 w-4 h-4"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Pay Button */}
-              <div className="pt-2">
+              <div className="pt-4">
                 <button
                   onClick={handleInitiatePayment}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+                  className="w-full py-3.5 px-4 rounded-xl bg-slate-100 hover:bg-white text-slate-900 font-semibold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <Lock className="w-4 h-4" />
-                  <span>Pay {formatINR(total)} via ZapUPI</span>
+                  <span>Pay {formatINR(total)}</span>
                 </button>
-                <p className="text-[10px] text-center text-slate-400 mt-2">
-                  🔒 256-bit encrypted transaction • Instant UPI confirmation
+                <p className="text-[10px] text-center text-slate-500 mt-3 font-medium">
+                  By continuing, you agree to Bazaaro's Terms of Service and Privacy Policy.
                 </p>
               </div>
             </div>
@@ -571,17 +571,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
           {/* STEP 3: Processing */}
           {step === 'processing' && (
-            <div className="py-12 flex flex-col items-center justify-center text-center space-y-4">
+            <div className="py-16 flex flex-col items-center justify-center text-center space-y-6">
               <div className="relative">
-                <div className="w-16 h-16 rounded-full border-4 border-amber-200 border-t-amber-600 animate-spin"></div>
-                <div className="absolute inset-0 flex items-center justify-center font-bold text-xs text-amber-600">
-                  ₹
+                <div className="w-16 h-16 rounded-full border-4 border-slate-800 border-t-slate-400 animate-spin"></div>
+                <div className="absolute inset-0 flex items-center justify-center font-bold text-xs text-slate-400">
+                  <Lock className="w-4 h-4" />
                 </div>
               </div>
               <div>
-                <h4 className="text-base font-bold text-slate-900">Redirecting to ZapUPI Gateway...</h4>
-                <p className="text-xs text-slate-500 max-w-sm mt-1">
-                  Creating secure payment session and reserving inventory from Bazaaro warehouse. Please do not close or refresh this window.
+                <h4 className="text-lg font-semibold text-slate-100">Processing Payment</h4>
+                <p className="text-sm text-slate-400 max-w-sm mt-2 mx-auto">
+                  Connecting to secure gateway. Please do not close or refresh this window.
                 </p>
               </div>
             </div>
@@ -589,65 +589,62 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
           {/* STEP 4: Order Placed Success */}
           {step === 'success' && placedOrder && (
-            <div className="space-y-5 animate-in fade-in zoom-in-95">
-              <div className="text-center space-y-2">
-                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
-                  <CheckCircle2 className="w-10 h-10" />
+            <div className="space-y-6 animate-in fade-in zoom-in-95 py-4">
+              <div className="text-center space-y-3">
+                <div className="w-16 h-16 rounded-full bg-emerald-900/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                  Payment Completed via ZapUPI
-                </span>
-                <h3 className="text-xl font-black text-slate-900">
-                  Shandaar! Your Order has been Placed.
+                <h3 className="text-2xl font-semibold text-slate-100">
+                  Order Placed Successfully.
                 </h3>
-                <p className="text-xs text-slate-600">
-                  Thank you for shopping at Bazaaro — <em>Sab kuch, ek bazaar mein.</em>
+                <p className="text-xs text-slate-400 font-mono">
+                  Your order has been confirmed.
                 </p>
               </div>
 
               {/* Order Receipt Card */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3">
-                <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+              <div className="p-5 rounded-xl bg-slate-800/30 border border-slate-700/50 text-xs space-y-4">
+                <div className="flex justify-between items-center pb-3 border-b border-slate-700/50">
                   <div>
-                    <div className="text-[10px] text-slate-400 font-bold uppercase">Order ID</div>
-                    <div className="font-mono font-bold text-slate-900 text-sm">{placedOrder.id}</div>
+                    <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mb-0.5">Order ID</div>
+                    <div className="font-mono font-medium text-slate-200 text-sm">{placedOrder.id}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-[10px] text-slate-400 font-bold uppercase">Payment ID</div>
-                    <div className="font-mono font-bold text-slate-700">{placedOrder.paymentId}</div>
+                    <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mb-0.5">Payment Ref</div>
+                    <div className="font-mono font-medium text-slate-300">{placedOrder.paymentId}</div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                <div className="grid grid-cols-2 gap-4 text-xs">
                   <div>
-                    <span className="text-slate-500 block">Deliver To:</span>
-                    <strong className="text-slate-800">{placedOrder.address.fullName}</strong>
-                    <div className="text-slate-600">{placedOrder.address.city}, {placedOrder.address.pincode}</div>
+                    <span className="text-slate-500 block mb-1">Deliver To:</span>
+                    <strong className="text-slate-200">{placedOrder.address.fullName}</strong>
+                    <div className="text-slate-400 mt-0.5">{placedOrder.address.city}, {placedOrder.address.pincode}</div>
                   </div>
                   <div>
-                    <span className="text-slate-500 block">Courier & ETA:</span>
-                    <strong className="text-slate-800">{placedOrder.courier}</strong>
-                    <div className="text-emerald-700 font-semibold">{placedOrder.estimatedDeliveryDate}</div>
+                    <span className="text-slate-500 block mb-1">Delivery Partner & ETA:</span>
+                    <strong className="text-slate-200">{placedOrder.courier}</strong>
+                    <div className="text-emerald-400 font-medium mt-0.5">{placedOrder.estimatedDeliveryDate}</div>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-slate-200 flex justify-between font-bold text-slate-900">
-                  <span>Total Amount Paid (INR):</span>
-                  <span className="text-amber-600 font-black">{formatINR(placedOrder.total)}</span>
+                <div className="pt-3 mt-1 border-t border-slate-700/50 flex justify-between font-semibold text-slate-100 text-sm">
+                  <span>Amount Paid:</span>
+                  <span>{formatINR(placedOrder.total)}</span>
                 </div>
               </div>
 
               {/* Action buttons */}
-              <div className="flex gap-3">
+              <div className="flex gap-4 pt-2">
                 <button
                   onClick={() => window.print()}
-                  className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="flex-1 py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-200 text-sm font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
-                  <Printer className="w-4 h-4" /> Print Tax Invoice
+                  <Printer className="w-4 h-4" /> Print Receipt
                 </button>
                 <button
                   onClick={onClose}
-                  className="flex-1 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors cursor-pointer"
+                  className="flex-1 py-3 px-4 rounded-xl bg-slate-100 hover:bg-white text-slate-900 text-sm font-semibold transition-colors cursor-pointer"
                 >
                   Continue Shopping
                 </button>

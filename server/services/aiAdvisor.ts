@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { GoogleGenAI } from '@google/genai';
 import { Product, IProduct } from '../models/Product';
+import { isDbConnected } from '../config/db';
+import { PRODUCTS } from '../../src/data/products';
 
 // Lazy-initialize Gemini client
 let aiClient: GoogleGenAI | null = null;
@@ -143,6 +145,54 @@ export interface GroundingResult {
  * Queries MongoDB Atlas live Product collection to retrieve grounded product facts.
  */
 export async function retrieveGroundedProducts(intent: UserQueryIntent): Promise<GroundingResult> {
+  // If MongoDB is not connected, ground directly from in-memory PRODUCTS
+  if (!isDbConnected()) {
+    let matching = PRODUCTS.filter((p) => {
+      if (intent.category && p.category !== intent.category) return false;
+      if (intent.brand && !new RegExp(intent.brand, 'i').test(p.brand)) return false;
+      if (intent.maxPrice && p.price > intent.maxPrice) return false;
+      if (intent.minPrice && p.price < intent.minPrice) return false;
+      if (intent.modelMentions.length > 0 && !intent.category && !intent.brand) {
+        const matchesAny = intent.modelMentions.some((m) => new RegExp(m, 'i').test(p.name));
+        if (!matchesAny) return false;
+      }
+      return true;
+    });
+
+    matching.sort((a, b) => b.rating - a.rating || b.reviewCount - a.reviewCount);
+    const products = matching.slice(0, 8);
+    const isExactPriceMatch = products.length > 0;
+    let alternatives: any[] = [];
+
+    if (products.length === 0 && (intent.maxPrice || intent.category || intent.brand)) {
+      alternatives = PRODUCTS.filter((p) => {
+        if (intent.category) return p.category === intent.category;
+        if (intent.brand) return new RegExp(intent.brand, 'i').test(p.brand);
+        return true;
+      })
+        .sort((a, b) => a.price - b.price)
+        .slice(0, 4);
+    }
+
+    const outOfStockProducts = products.filter((p) => !p.inStock || p.stockCount <= 0);
+    const queriedModelsNotInCatalog: string[] = [];
+    for (const m of intent.modelMentions) {
+      const found = PRODUCTS.some((p) => new RegExp(m, 'i').test(p.name));
+      if (!found) {
+        queriedModelsNotInCatalog.push(m);
+      }
+    }
+
+    return {
+      products,
+      matchedCount: products.length,
+      isExactPriceMatch,
+      outOfStockProducts,
+      alternatives,
+      queriedModelsNotInCatalog,
+    };
+  }
+
   const query: any = { isActive: { $ne: false } };
 
   if (intent.category) {
@@ -424,10 +474,18 @@ ${groundingText}`;
   // Fetch full details of referenced products from MongoDB if available
   let recommendedProducts: any[] = [];
   if (recommendedProductIds.length > 0) {
-    recommendedProducts = await Product.find({
-      id: { $in: recommendedProductIds },
-      isActive: { $ne: false },
-    }).lean();
+    if (isDbConnected()) {
+      try {
+        recommendedProducts = await Product.find({
+          id: { $in: recommendedProductIds },
+          isActive: { $ne: false },
+        }).lean();
+      } catch (err: any) {
+        recommendedProducts = PRODUCTS.filter((p) => recommendedProductIds.includes(p.id));
+      }
+    } else {
+      recommendedProducts = PRODUCTS.filter((p) => recommendedProductIds.includes(p.id));
+    }
   } else if (groundingResult.products.length > 0) {
     recommendedProducts = groundingResult.products.slice(0, 3);
   }

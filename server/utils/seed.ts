@@ -21,11 +21,14 @@ export async function seedDatabaseIfEmpty(): Promise<void> {
       console.log(`[Seed] Seeded ${categoryDocs.length} categories successfully.`);
     }
 
-    // 2. Seed Products
-    const productCount = await Product.countDocuments();
-    if (productCount === 0) {
-      console.log('[Seed] Populating initial electronic products into MongoDB...');
-      const productDocs = PRODUCTS.map((prod) => ({
+    // 2. Seed Products (Idempotent: populate initial or sync newly added products)
+    const existingProducts = await Product.find({}, 'id').lean();
+    const existingIdSet = new Set(existingProducts.map((p) => p.id));
+    const missingProducts = PRODUCTS.filter((prod) => !existingIdSet.has(prod.id));
+
+    if (missingProducts.length > 0) {
+      console.log(`[Seed] Populating ${missingProducts.length} new electronic products into MongoDB...`);
+      const productDocs = missingProducts.map((prod) => ({
         id: prod.id,
         name: prod.name,
         brand: prod.brand,
@@ -48,7 +51,23 @@ export async function seedDatabaseIfEmpty(): Promise<void> {
         isActive: true,
       }));
       await Product.insertMany(productDocs);
-      console.log(`[Seed] Seeded ${productDocs.length} products successfully.`);
+      console.log(`[Seed] Seeded ${productDocs.length} new products successfully.`);
+    }
+
+    // Sync updated images for all products to MongoDB
+    const bulkOps = PRODUCTS.map((prod) => ({
+      updateOne: {
+        filter: { id: prod.id },
+        update: {
+          $set: {
+            images: prod.images,
+          },
+        },
+      },
+    }));
+    if (bulkOps.length > 0) {
+      await Product.bulkWrite(bulkOps);
+      console.log(`[Seed] Synced verified product images across ${bulkOps.length} products.`);
     }
 
     // 3. Seed Users (Default Admin & Customer for easy evaluation)

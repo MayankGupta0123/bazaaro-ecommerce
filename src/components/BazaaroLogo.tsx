@@ -10,7 +10,7 @@ interface BazaaroLogoProps {
 
 export const BazaaroLogo: React.FC<BazaaroLogoProps> = ({
   size = 'md',
-  theme = 'light',
+  theme = 'dark',
   showTagline = true,
   iconOnly = false,
   className = '',
@@ -144,11 +144,11 @@ export const BazaaroLogo: React.FC<BazaaroLogoProps> = ({
       {/* Modern Typographic Wordmark & Tagline */}
       {!iconOnly && (
         <div className="flex flex-col justify-center">
-          <div className="flex items-center gap-1.5 leading-none">
+          <div className="flex items-center gap-2 leading-none">
             {/* Custom Styled Brand Name */}
             <span
-              className={`font-extrabold tracking-tight transition-colors duration-200 ${iconDimensions.text} ${
-                isDark ? 'text-white group-hover:text-amber-400' : 'text-slate-900 group-hover:text-amber-600'
+              className={`font-bold tracking-tight transition-colors duration-200 ${iconDimensions.text} ${
+                isDark ? 'text-slate-100 group-hover:text-white' : 'text-slate-900 group-hover:text-slate-700'
               }`}
             >
               Bazaaro
@@ -156,23 +156,23 @@ export const BazaaroLogo: React.FC<BazaaroLogoProps> = ({
 
             {/* Aesthetic Tech Pill Tag */}
             <span
-              className={`inline-flex items-center gap-1 font-bold tracking-wider uppercase rounded-full ${iconDimensions.badge} ${
+              className={`inline-flex items-center gap-1 font-semibold tracking-wider uppercase rounded-full ${iconDimensions.badge} ${
                 isDark
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                  : 'bg-amber-100/90 text-amber-900 border border-amber-300/80 shadow-2xs'
+                  ? 'bg-slate-800/90 text-slate-300 border border-slate-700'
+                  : 'bg-slate-100 text-slate-800 border border-slate-300'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span>INDIA</span>
             </span>
           </div>
 
           {/* Tagline: "Sab kuch, ek bazaar mein." */}
           {showTagline && (
-            <div className="flex items-center gap-1 mt-0.5">
+            <div className="flex items-center gap-1 mt-1">
               <span
-                className={`font-medium tracking-tight whitespace-nowrap transition-colors ${iconDimensions.tagline} ${
-                  isDark ? 'text-amber-200/70 group-hover:text-amber-200' : 'text-amber-700/90 group-hover:text-amber-900'
+                className={`font-normal tracking-tight whitespace-nowrap transition-colors ${iconDimensions.tagline} ${
+                  isDark ? 'text-slate-400 group-hover:text-slate-300' : 'text-slate-500 group-hover:text-slate-700'
                 }`}
               >
                 Sab kuch, ek bazaar mein.

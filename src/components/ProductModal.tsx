@@ -242,38 +242,38 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   const currentDisplayCount = stats?.totalReviews ?? product.reviewCount;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 bg-bazaaro-dark/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+      <div className="bg-bazaaro-surface rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-700/50 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/70">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-600">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/50">
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
               {product.brand}
             </span>
-            <span className="text-slate-300">•</span>
-            <span className="text-xs text-slate-500 font-medium">
-              Product ID: #{product.id.toUpperCase()}
+            <span className="text-slate-600">•</span>
+            <span className="text-[10px] text-slate-500 font-medium tracking-wider">
+              ID: {product.id.toUpperCase()}
             </span>
             {product.madeInIndia && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-900 border border-slate-200 ml-2">
                 🇮🇳 Made in India
               </span>
             )}
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
+            className="p-1.5 rounded-full text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="overflow-y-auto p-6 flex-1 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div className="overflow-y-auto p-6 flex-1 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
             {/* Left: Gallery */}
             <div className="space-y-4">
-              <div className="aspect-4/3 rounded-2xl bg-slate-50 border border-slate-100 p-6 flex items-center justify-center relative overflow-hidden">
+              <div className="aspect-4/3 rounded-2xl bg-[#F5F5F7] p-8 flex items-center justify-center relative overflow-hidden">
                 <img
                   src={product.images[selectedImageIndex] || product.images[0]}
                   alt={product.name}
@@ -282,8 +282,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 />
                 <button
                   onClick={() => onToggleWishlist(product)}
-                  className={`absolute top-4 right-4 p-2.5 rounded-full shadow-md backdrop-blur-md transition-colors cursor-pointer ${
-                    isWishlisted ? 'bg-rose-50 text-rose-600' : 'bg-white/90 text-slate-400 hover:text-rose-500'
+                  className={`absolute top-4 right-4 p-2.5 rounded-full transition-colors cursor-pointer ${
+                    isWishlisted ? 'bg-rose-50 text-rose-500' : 'bg-white/80 text-slate-400 hover:text-slate-900 hover:bg-white'
                   }`}
                 >
                   <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-rose-500' : ''}`} />
@@ -297,86 +297,86 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                     <button
                       key={idx}
                       onClick={() => setSelectedImageIndex(idx)}
-                      className={`w-16 h-16 rounded-xl border-2 p-1 overflow-hidden transition-all cursor-pointer ${
-                        selectedImageIndex === idx ? 'border-amber-500 bg-amber-50' : 'border-slate-200 hover:border-slate-300'
+                      className={`w-16 h-16 rounded-xl border p-1 overflow-hidden transition-all cursor-pointer bg-white ${
+                        selectedImageIndex === idx ? 'border-slate-800 shadow-sm' : 'border-slate-200 hover:border-slate-400 opacity-70 hover:opacity-100'
                       }`}
                     >
-                      <img src={img} alt="" referrerPolicy="no-referrer" className="w-full h-full object-contain" />
+                      <img src={img} alt="" referrerPolicy="no-referrer" className="w-full h-full object-contain mix-blend-multiply" />
                     </button>
                   ))}
                 </div>
               )}
 
               {/* Trust assurances for Indian shoppers */}
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 text-center text-xs text-slate-600">
-                <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <ShieldCheck className="w-4 h-4 text-amber-600 mx-auto mb-1" />
-                  <span className="font-semibold text-slate-800 block text-[11px]">Brand Warranty</span>
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-700/50 text-center text-xs text-slate-400">
+                <div className="p-3 rounded-xl bg-slate-800/30 border border-slate-700/50">
+                  <ShieldCheck className="w-4 h-4 text-slate-300 mx-auto mb-2" />
+                  <span className="font-semibold text-slate-200 block text-[11px]">Brand Warranty</span>
                   <span className="text-[10px] text-slate-500">1 Year Pan-India</span>
                 </div>
-                <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <RotateCcw className="w-4 h-4 text-blue-600 mx-auto mb-1" />
-                  <span className="font-semibold text-slate-800 block text-[11px]">7 Days Replacement</span>
+                <div className="p-3 rounded-xl bg-slate-800/30 border border-slate-700/50">
+                  <RotateCcw className="w-4 h-4 text-slate-300 mx-auto mb-2" />
+                  <span className="font-semibold text-slate-200 block text-[11px]">7 Days Return</span>
                   <span className="text-[10px] text-slate-500">Hassle-Free</span>
                 </div>
-                <div className="p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <CreditCard className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
-                  <span className="font-semibold text-slate-800 block text-[11px]">ZapUPI Secure</span>
+                <div className="p-3 rounded-xl bg-slate-800/30 border border-slate-700/50">
+                  <CreditCard className="w-4 h-4 text-slate-300 mx-auto mb-2" />
+                  <span className="font-semibold text-slate-200 block text-[11px]">Secure Payments</span>
                   <span className="text-[10px] text-slate-500">Instant UPI</span>
                 </div>
               </div>
             </div>
 
             {/* Right: Info & Pricing */}
-            <div className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
+            <div className="space-y-6">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-slate-50 leading-tight">
                 {product.name}
               </h2>
 
               {/* Rating header */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1 bg-amber-500 text-slate-950 font-bold px-2 py-0.5 rounded text-xs">
-                  <Star className="w-3.5 h-3.5 fill-slate-950" />
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1.5 bg-slate-100 text-slate-900 font-semibold px-2 py-0.5 rounded text-xs">
+                  <Star className="w-3.5 h-3.5 fill-current" />
                   <span>{currentDisplayRating}</span>
                 </div>
                 <button
                   onClick={() => setActiveTab('reviews')}
-                  className="text-xs text-slate-500 hover:text-amber-600 font-medium underline underline-offset-2 transition-colors cursor-pointer"
+                  className="text-xs text-slate-400 hover:text-slate-200 font-medium underline underline-offset-4 transition-colors cursor-pointer"
                 >
                   {currentDisplayCount} Customer Reviews & Ratings
                 </button>
               </div>
 
               {/* Price */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div className="p-5 rounded-2xl bg-slate-800/30 border border-slate-700/50">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-black text-slate-900">
+                  <span className="text-3xl font-semibold text-slate-50 tracking-tight">
                     {formatINR(product.price)}
                   </span>
                   {product.originalPrice > product.price && (
-                    <span className="text-sm text-slate-400 line-through font-medium">
+                    <span className="text-sm text-slate-500 line-through font-medium">
                       M.R.P.: {formatINR(product.originalPrice)}
                     </span>
                   )}
-                  <span className="px-2 py-0.5 rounded text-xs font-bold bg-amber-500 text-slate-950">
+                  <span className="px-2 py-1 rounded text-[10px] font-bold bg-rose-600 text-white">
                     {product.discountPercent}% OFF
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1">
+                <p className="text-[11px] text-slate-400 mt-2">
                   Inclusive of all taxes (GST 18% inclusive invoice provided). Free delivery on this order.
                 </p>
 
                 {/* Instant Bank Offer */}
-                <div className="mt-3 pt-3 border-t border-slate-200 flex items-center gap-2 text-xs text-amber-900 font-medium">
-                  <span className="px-1.5 py-0.5 rounded bg-amber-200/80 text-[10px] font-bold">OFFER</span>
+                <div className="mt-4 pt-4 border-t border-slate-700/50 flex items-center gap-3 text-xs text-slate-300 font-medium">
+                  <span className="px-1.5 py-0.5 rounded bg-slate-700 text-[10px] font-bold">OFFER</span>
                   <span>Instant ₹3,000 off on HDFC & ICICI Credit Card EMI transactions.</span>
                 </div>
               </div>
 
               {/* Pincode checker */}
-              <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <MapPin className="w-3.5 h-3.5 text-amber-600" />
+              <div className="p-5 rounded-2xl border border-slate-700/50 bg-slate-800/30 space-y-3">
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
+                  <MapPin className="w-4 h-4 text-slate-400" />
                   <span>Check Delivery Date to Your Pincode:</span>
                 </div>
                 <div className="flex gap-2">
@@ -386,17 +386,17 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                     value={checkPincode}
                     onChange={(e) => setCheckPincode(e.target.value.replace(/\D/g, ''))}
                     placeholder="Enter 6-digit PIN"
-                    className="w-36 px-3 py-1.5 text-xs border border-slate-300 rounded-lg outline-hidden focus:border-amber-500"
+                    className="flex-1 px-4 py-2 text-xs bg-slate-800 border border-slate-700 text-slate-200 rounded-lg outline-hidden focus:border-slate-500 transition-colors"
                   />
                   <button
                     onClick={handlePincodeCheck}
-                    className="px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+                    className="px-5 py-2 bg-slate-700 border border-slate-600 text-slate-200 text-xs font-semibold rounded-lg hover:bg-slate-600 transition-colors cursor-pointer"
                   >
                     Check
                   </button>
                 </div>
                 {pincodeMessage && (
-                  <p className="text-xs text-emerald-700 font-medium flex items-center gap-1">
+                  <p className="text-xs text-emerald-400 font-medium flex items-center gap-1.5 mt-2">
                     <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                     <span>{pincodeMessage}</span>
                   </p>
@@ -404,17 +404,17 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               </div>
 
               {/* CTAs */}
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-4 pt-2">
                 <button
                   onClick={() => onAddToCart(product)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm shadow-md transition-all cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-200 hover:text-white font-semibold text-sm transition-colors cursor-pointer"
                 >
-                  <ShoppingBag className="w-4 h-4 text-amber-400" />
+                  <ShoppingBag className="w-4 h-4" />
                   <span>Add to Cart</span>
                 </button>
                 <button
                   onClick={() => onBuyNow(product)}
-                  className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-sm shadow-md transition-all cursor-pointer"
+                  className="flex-1 py-3.5 px-4 rounded-xl bg-slate-100 hover:bg-white text-slate-900 font-semibold text-sm transition-colors cursor-pointer"
                 >
                   Buy Now
                 </button>
@@ -423,28 +423,28 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           </div>
 
           {/* Tabbed Info Section */}
-          <div className="border-t border-slate-200 pt-6">
-            <div className="flex border-b border-slate-200 gap-6 text-sm font-semibold overflow-x-auto">
+          <div className="border-t border-slate-700/50 pt-8">
+            <div className="flex border-b border-slate-700/50 gap-8 text-sm font-semibold overflow-x-auto scrollbar-none">
               <button
                 onClick={() => setActiveTab('specs')}
-                className={`pb-3 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
-                  activeTab === 'specs' ? 'border-amber-600 text-amber-600' : 'border-transparent text-slate-500 hover:text-slate-800'
+                className={`pb-4 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
+                  activeTab === 'specs' ? 'border-slate-200 text-slate-100' : 'border-transparent text-slate-500 hover:text-slate-300'
                 }`}
               >
                 Specifications
               </button>
               <button
                 onClick={() => setActiveTab('emi')}
-                className={`pb-3 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
-                  activeTab === 'emi' ? 'border-amber-600 text-amber-600' : 'border-transparent text-slate-500 hover:text-slate-800'
+                className={`pb-4 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
+                  activeTab === 'emi' ? 'border-slate-200 text-slate-100' : 'border-transparent text-slate-500 hover:text-slate-300'
                 }`}
               >
                 No Cost EMI Plans
               </button>
               <button
                 onClick={() => setActiveTab('warranty')}
-                className={`pb-3 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
-                  activeTab === 'warranty' ? 'border-amber-600 text-amber-600' : 'border-transparent text-slate-500 hover:text-slate-800'
+                className={`pb-4 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
+                  activeTab === 'warranty' ? 'border-slate-200 text-slate-100' : 'border-transparent text-slate-500 hover:text-slate-300'
                 }`}
               >
                 Domestic Warranty
@@ -452,11 +452,11 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               <button
                 onClick={() => setActiveTab('reviews')}
                 className={`pb-3 border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'reviews' ? 'border-amber-600 text-amber-600' : 'border-transparent text-slate-500 hover:text-slate-800'
+                  activeTab === 'reviews' ? 'border-cyan-500 text-cyan-400' : 'border-transparent text-slate-500 hover:text-slate-300'
                 }`}
               >
                 <span>Customer Reviews</span>
-                <span className="px-1.5 py-0.2 rounded-full text-[11px] bg-slate-100 text-slate-700 font-bold">
+                <span className="px-1.5 py-0.2 rounded-full text-[11px] bg-bazaaro-dark border border-bazaaro-border text-slate-400 font-bold">
                   {currentDisplayCount}
                 </span>
               </button>
@@ -467,9 +467,9 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               {activeTab === 'specs' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   {Object.entries(product.specs).map(([key, value]) => (
-                    <div key={key} className="p-3 bg-slate-50 rounded-xl flex justify-between gap-4">
-                      <span className="font-semibold text-slate-600">{key}</span>
-                      <span className="font-bold text-slate-900 text-right">{value}</span>
+                    <div key={key} className="p-3 bg-bazaaro-dark border border-bazaaro-border/50 rounded-xl flex justify-between gap-4">
+                      <span className="font-semibold text-slate-400">{key}</span>
+                      <span className="font-bold text-slate-200 text-right">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -499,14 +499,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
               {/* 3. Warranty Tab */}
               {activeTab === 'warranty' && (
-                <div className="space-y-3 text-xs text-slate-700">
-                  <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
-                    <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                <div className="space-y-3 text-xs text-slate-300">
+                  <div className="p-4 rounded-xl bg-violet-900/20 border border-violet-500/30 flex items-start gap-3 shadow-[inset_0_2px_8px_rgba(139,92,246,0.05)]">
+                    <ShieldCheck className="w-5 h-5 text-violet-400 shrink-0 mt-0.5" />
                     <div>
-                      <h4 className="font-bold text-slate-900 text-sm mb-1">Official Brand Warranty Policy</h4>
-                      <p className="text-slate-600 leading-relaxed">{product.warranty}</p>
+                      <h4 className="font-bold text-slate-100 text-sm mb-1">Official Brand Warranty Policy</h4>
+                      <p className="text-slate-400 leading-relaxed">{product.warranty}</p>
                       <p className="mt-2 text-[11px] text-slate-500">
-                        Includes free doorstep pick-up and drop for service across 450+ Indian metro and tier-2 cities.
+                        Includes free doorstep pick-up and drop for service across 450+ cities.
                       </p>
                     </div>
                   </div>
@@ -518,38 +518,38 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 <div className="space-y-6">
                   {/* Feedback alerts */}
                   {reviewSuccess && (
-                    <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center justify-between">
+                    <div className="p-3.5 bg-emerald-900/20 border border-emerald-500/30 rounded-xl text-xs text-emerald-400 flex items-center justify-between shadow-[0_0_10px_rgba(16,185,129,0.1)]">
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                         <span>{reviewSuccess}</span>
                       </div>
-                      <button onClick={() => setReviewSuccess(null)} className="text-emerald-500 hover:text-emerald-700">
+                      <button onClick={() => setReviewSuccess(null)} className="text-emerald-500 hover:text-emerald-400 cursor-pointer">
                         <X className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   )}
 
                   {/* Rating Breakdown Card */}
-                  <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                  <div className="bg-bazaaro-dark border border-bazaaro-border/80 rounded-2xl p-5 grid grid-cols-1 md:grid-cols-12 gap-6 items-center shadow-[inset_0_2px_15px_rgba(0,0,0,0.5)]">
                     {/* Left: Overall score */}
-                    <div className="md:col-span-4 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-slate-200 pb-4 md:pb-0 md:pr-4">
-                      <div className="text-4xl font-black text-slate-900 tracking-tight">
+                    <div className="md:col-span-4 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-bazaaro-border/50 pb-4 md:pb-0 md:pr-4">
+                      <div className="text-4xl font-black text-cyan-400 tracking-tight drop-shadow-[0_0_10px_rgba(6,182,212,0.3)]">
                         {currentDisplayRating}
                       </div>
-                      <div className="flex items-center gap-1 my-1.5 text-amber-500">
+                      <div className="flex items-center gap-1 my-1.5">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
                             className={`w-4 h-4 ${
                               star <= Math.round(currentDisplayRating)
-                                ? 'fill-amber-400 text-amber-400'
-                                : 'text-slate-200'
+                                ? 'fill-cyan-400 text-cyan-400 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]'
+                                : 'text-slate-700'
                             }`}
                           />
                         ))}
                       </div>
-                      <p className="text-xs text-slate-500 font-medium">
-                        Based on {currentDisplayCount} verified reviews
+                      <p className="text-xs text-slate-500 font-medium font-mono">
+                        Based on {currentDisplayCount} verified logs
                       </p>
                     </div>
 
@@ -561,13 +561,13 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                         const percent = stats?.totalReviews ? Math.round((count / total) * 100) : 0;
                         return (
                           <div key={star} className="flex items-center gap-2">
-                            <span className="w-12 text-slate-600 font-medium flex items-center gap-1">
+                            <span className="w-12 text-slate-400 font-medium flex items-center gap-1">
                               <span>{star}</span>
-                              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                              <Star className="w-3 h-3 fill-cyan-500 text-cyan-500" />
                             </span>
-                            <div className="flex-1 bg-slate-200 h-2 rounded-full overflow-hidden">
+                            <div className="flex-1 bg-black h-2 rounded-full overflow-hidden border border-bazaaro-border/50">
                               <div
-                                className="bg-amber-500 h-full rounded-full transition-all duration-500"
+                                className="bg-cyan-500 h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(6,182,212,0.8)]"
                                 style={{ width: `${percent}%` }}
                               />
                             </div>
@@ -581,54 +581,54 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                   </div>
 
                   {/* Eligibility & Write Review Action Section */}
-                  <div className="p-4 rounded-2xl bg-white border border-slate-200">
+                  <div className="p-4 rounded-2xl bg-bazaaro-surface border border-bazaaro-border/80 shadow-[0_0_15px_rgba(0,0,0,0.3)]">
                     {!token ? (
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-                        <div className="flex items-center gap-2 text-slate-700">
-                          <MessageSquare className="w-4 h-4 text-amber-600 shrink-0" />
-                          <span>Purchased this item? Sign in to submit your verified customer rating & review.</span>
+                        <div className="flex items-center gap-2 text-slate-300">
+                          <MessageSquare className="w-4 h-4 text-cyan-500 shrink-0" />
+                          <span>Acquired this hardware? Sign in to submit a verified review.</span>
                         </div>
                         <button
                           onClick={onRequireAuth}
-                          className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-colors shrink-0 cursor-pointer"
+                          className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-bazaaro-dark font-bold rounded-xl transition-colors shrink-0 cursor-pointer shadow-[0_0_10px_rgba(6,182,212,0.3)]"
                         >
-                          Sign In to Review
+                          Initialize Login
                         </button>
                       </div>
                     ) : userHasPurchased ? (
                       <div>
                         {userReview && !isFormOpen ? (
                           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-                            <div className="flex items-center gap-2 text-emerald-800">
-                              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                              <span className="font-semibold">You have reviewed this product ({userReview.rating}★).</span>
+                            <div className="flex items-center gap-2 text-emerald-400">
+                              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                              <span className="font-semibold">Log recorded ({userReview.rating}★).</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <button
                                 onClick={() => handleOpenEdit(userReview)}
-                                className="px-3 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                                className="px-3 py-1.5 text-xs font-semibold bg-bazaaro-dark border border-bazaaro-border hover:bg-black text-slate-300 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
-                                <span>Edit Review</span>
+                                <span>Edit Log</span>
                               </button>
                               <button
                                 onClick={() => handleDeleteReview(userReview._id || userReview.id || '')}
-                                className="px-3 py-1.5 text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
+                                className="px-3 py-1.5 text-xs font-semibold bg-rose-900/20 hover:bg-rose-900/40 text-rose-400 border border-rose-500/30 rounded-lg flex items-center gap-1 transition-colors cursor-pointer"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
-                                <span>Delete</span>
+                                <span>Purge</span>
                               </button>
                             </div>
                           </div>
                         ) : !isFormOpen ? (
                           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                             <div className="text-xs">
-                              <span className="font-bold text-slate-900 block flex items-center gap-1.5">
-                                <Sparkles className="w-4 h-4 text-amber-600" />
+                              <span className="font-bold text-slate-100 block flex items-center gap-1.5">
+                                <Sparkles className="w-4 h-4 text-cyan-400" />
                                 Verified Purchaser Eligible
                               </span>
-                              <span className="text-slate-500">
-                                You purchased this item in a paid order. Share your genuine feedback with the Bazaaro community!
+                              <span className="text-slate-400">
+                                You hold ownership of this hardware. Submit your analytics to the network.
                               </span>
                             </div>
                             <button
@@ -640,29 +640,29 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                                 setFormComment('');
                                 setReviewError(null);
                               }}
-                              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
+                              className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-bazaaro-dark font-bold text-xs rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
                             >
                               <Plus className="w-4 h-4" />
-                              <span>Write a Review</span>
+                              <span>Submit Log</span>
                             </button>
                           </div>
                         ) : null}
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2.5 text-xs text-slate-600">
-                        <ShieldCheck className="w-4 h-4 text-slate-400 shrink-0" />
+                      <div className="flex items-center gap-2.5 text-xs text-slate-400">
+                        <ShieldCheck className="w-4 h-4 text-cyan-700 shrink-0" />
                         <span>
-                          <strong>Verified Reviews Only:</strong> Only customers who have ordered and paid for this product on Bazaaro can submit a review.
+                          <strong className="text-slate-300">Verified Logs Only:</strong> Only customers who have ordered and paid for this product can submit analytics.
                         </span>
                       </div>
                     )}
 
                     {/* Write/Edit Review Form Drawer */}
                     {isFormOpen && (
-                      <form onSubmit={handleSubmitReview} className="mt-4 pt-4 border-t border-slate-100 space-y-4 text-xs animate-in fade-in duration-200">
+                      <form onSubmit={handleSubmitReview} className="mt-4 pt-4 border-t border-bazaaro-border/50 space-y-4 text-xs animate-in fade-in duration-200">
                         <div className="flex items-center justify-between">
-                          <h4 className="font-bold text-slate-900 text-sm">
-                            {editingReviewId ? 'Edit Your Customer Review' : 'Write a Verified Customer Review'}
+                          <h4 className="font-bold text-slate-100 text-sm">
+                            {editingReviewId ? 'Edit Your Network Log' : 'Initialize a New Analytics Log'}
                           </h4>
                           <button
                             type="button"
@@ -670,14 +670,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                               setIsFormOpen(false);
                               setEditingReviewId(null);
                             }}
-                            className="text-slate-400 hover:text-slate-600"
+                            className="text-slate-500 hover:text-cyan-400 cursor-pointer"
                           >
                             <X className="w-4 h-4" />
                           </button>
                         </div>
 
                         {reviewError && (
-                          <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 flex items-center gap-2 text-xs">
+                          <div className="p-3 bg-rose-900/20 border border-rose-500/30 rounded-xl text-rose-400 flex items-center gap-2 text-xs shadow-[0_0_10px_rgba(244,63,94,0.1)]">
                             <AlertCircle className="w-4 h-4 shrink-0" />
                             <span>{reviewError}</span>
                           </div>
@@ -685,8 +685,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
                         {/* Interactive Star Picker */}
                         <div className="space-y-1.5">
-                          <label className="font-semibold text-slate-700 block">
-                            Overall Rating (1 to 5 Stars) *
+                          <label className="font-semibold text-slate-300 block">
+                            Performance Rating (1 to 5) *
                           </label>
                           <div className="flex items-center gap-1">
                             {[1, 2, 3, 4, 5].map((star) => {
@@ -703,14 +703,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                                   <Star
                                     className={`w-6 h-6 ${
                                       star <= activeStar
-                                        ? 'fill-amber-400 text-amber-400'
-                                        : 'text-slate-300'
+                                        ? 'fill-cyan-400 text-cyan-400 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]'
+                                        : 'text-slate-600'
                                     }`}
                                   />
                                 </button>
                               );
                             })}
-                            <span className="ml-2 text-xs font-bold text-slate-700">
+                            <span className="ml-2 text-xs font-bold text-slate-400 font-mono">
                               {formRating === 5 && '5 Stars — Excellent'}
                               {formRating === 4 && '4 Stars — Very Good'}
                               {formRating === 3 && '3 Stars — Average'}
@@ -722,36 +722,36 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
                         {/* Title input */}
                         <div className="space-y-1">
-                          <label className="font-semibold text-slate-700 block">
-                            Headline / Title (Optional)
+                          <label className="font-semibold text-slate-300 block">
+                            Header Sequence (Optional)
                           </label>
                           <input
                             type="text"
                             value={formTitle}
                             onChange={(e) => setFormTitle(e.target.value)}
-                            placeholder="e.g. Exceptional sound and battery life, lightning-fast delivery!"
-                            className="w-full px-3.5 py-2 border border-slate-200 rounded-xl focus:border-amber-500 focus:outline-hidden text-xs bg-slate-50/50"
+                            placeholder="e.g. Exceptional optics and battery life, instant transfer!"
+                            className="w-full px-3.5 py-2 bg-black border border-bazaaro-border rounded-xl focus:border-cyan-500 focus:outline-hidden text-xs text-slate-200 shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]"
                             maxLength={100}
                           />
                         </div>
 
                         {/* Comment input */}
                         <div className="space-y-1">
-                          <label className="font-semibold text-slate-700 block">
-                            Review Details * (Min 5 characters)
+                          <label className="font-semibold text-slate-300 block">
+                            Analytics Payload * (Min 5 chars)
                           </label>
                           <textarea
                             rows={3}
                             value={formComment}
                             onChange={(e) => setFormComment(e.target.value)}
-                            placeholder="Share your experience with build quality, battery life, packaging, and real-world performance..."
-                            className="w-full px-3.5 py-2 border border-slate-200 rounded-xl focus:border-amber-500 focus:outline-hidden text-xs bg-slate-50/50 resize-none"
+                            placeholder="Detail your operational experience with build quality, thermals, packaging, and real-world execution..."
+                            className="w-full px-3.5 py-2 bg-black border border-bazaaro-border rounded-xl focus:border-cyan-500 focus:outline-hidden text-xs text-slate-200 resize-none shadow-[inset_0_2px_8px_rgba(0,0,0,0.5)]"
                             required
                             minLength={5}
                             maxLength={1000}
                           />
-                          <div className="flex justify-between text-[10px] text-slate-400">
-                            <span>Minimum 5 characters</span>
+                          <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span>Req: 5 chars</span>
                             <span>{formComment.length} / 1000</span>
                           </div>
                         </div>
@@ -763,19 +763,19 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                               setIsFormOpen(false);
                               setEditingReviewId(null);
                             }}
-                            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs transition-colors cursor-pointer"
+                            className="px-3.5 py-2 bg-bazaaro-dark hover:bg-bazaaro-surface border border-bazaaro-border text-slate-300 font-semibold rounded-xl text-xs transition-colors cursor-pointer"
                           >
-                            Cancel
+                            Abort
                           </button>
                           <button
                             type="submit"
                             disabled={reviewSubmitting}
-                            className="px-5 py-2 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-bold rounded-xl text-xs transition-all shadow-xs cursor-pointer flex items-center gap-1.5"
+                            className="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-700 disabled:text-slate-500 text-bazaaro-dark font-bold rounded-xl text-xs transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] cursor-pointer flex items-center gap-1.5"
                           >
                             {reviewSubmitting ? (
-                              <span>Saving...</span>
+                              <span>Encrypting...</span>
                             ) : (
-                              <span>{editingReviewId ? 'Update Review' : 'Submit Review'}</span>
+                              <span>{editingReviewId ? 'Update Analytics' : 'Transmit Log'}</span>
                             )}
                           </button>
                         </div>
@@ -785,21 +785,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
                   {/* Reviews List */}
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-                      <span>Customer Feedback ({reviews.length})</span>
-                      <span>Verified Purchases Marked 🇮🇳</span>
+                    <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
+                      <span>Network Analytics ({reviews.length})</span>
+                      <span>Verified Purchases Marked [SECURE]</span>
                     </div>
 
                     {loadingReviews ? (
-                      <div className="p-8 text-center text-xs text-slate-400">
-                        Loading customer reviews...
+                      <div className="p-8 text-center text-xs text-cyan-500/50 animate-pulse font-mono">
+                        FETCHING NETWORK LOGS...
                       </div>
                     ) : reviews.length === 0 ? (
-                      <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200/80 text-center space-y-2">
-                        <MessageSquare className="w-8 h-8 text-slate-300 mx-auto" />
-                        <p className="text-xs font-semibold text-slate-700">No customer reviews yet</p>
+                      <div className="p-8 rounded-2xl bg-black border border-bazaaro-border/50 text-center space-y-2 shadow-[inset_0_2px_15px_rgba(0,0,0,0.5)]">
+                        <MessageSquare className="w-8 h-8 text-slate-600 mx-auto" />
+                        <p className="text-xs font-semibold text-slate-300">No logs found in this sector.</p>
                         <p className="text-[11px] text-slate-500">
-                          Be the first verified purchaser to review this product on Bazaaro!
+                          Be the first verified purchaser to review for this hardware.
                         </p>
                       </div>
                     ) : (
@@ -808,44 +808,44 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                         return (
                           <div
                             key={rev._id || rev.id}
-                            className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5 transition-all hover:border-slate-200"
+                            className="p-4 rounded-2xl bg-black border border-bazaaro-border space-y-2.5 transition-all hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(6,182,212,0.1)]"
                           >
                             {/* Review Top Row */}
                             <div className="flex items-start justify-between gap-3">
                               <div>
                                 <div className="flex items-center gap-2">
-                                  <span className="font-bold text-slate-900 text-xs">
+                                  <span className="font-bold text-slate-200 text-xs">
                                     {rev.userName}
                                   </span>
                                   {rev.userCity && (
-                                    <span className="text-[11px] text-slate-400">
+                                    <span className="text-[11px] text-slate-500">
                                       • {rev.userCity}
                                     </span>
                                   )}
                                   {rev.verifiedPurchase && (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-100/70 text-emerald-800 text-[10px] font-bold">
-                                      <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold">
+                                      <ShieldCheck className="w-3 h-3 text-emerald-500" />
                                       Verified Purchase
                                     </span>
                                   )}
                                 </div>
                                 <div className="flex items-center gap-2 mt-1">
-                                  <div className="flex items-center text-amber-500">
+                                  <div className="flex items-center text-cyan-500">
                                     {[1, 2, 3, 4, 5].map((star) => (
                                       <Star
                                         key={star}
                                         className={`w-3 h-3 ${
                                           star <= rev.rating
-                                            ? 'fill-amber-400 text-amber-400'
-                                            : 'text-slate-200'
+                                            ? 'fill-cyan-400 text-cyan-400 drop-shadow-[0_0_3px_rgba(6,182,212,0.5)]'
+                                            : 'text-slate-700'
                                         }`}
                                       />
                                     ))}
                                   </div>
-                                  <span className="text-[10px] text-slate-400">
+                                  <span className="text-[10px] text-slate-500 font-mono">
                                     {new Date(rev.createdAt).toLocaleDateString('en-IN', {
-                                      day: 'numeric',
-                                      month: 'short',
+                                      day: '2-digit',
+                                      month: '2-digit',
                                       year: 'numeric',
                                     })}
                                   </span>
@@ -857,15 +857,15 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                                 <div className="flex items-center gap-1">
                                   <button
                                     onClick={() => handleOpenEdit(rev)}
-                                    title="Edit your review"
-                                    className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 rounded-lg transition-colors cursor-pointer"
+                                    title="Edit your log"
+                                    className="p-1.5 text-slate-500 hover:text-cyan-400 hover:bg-black rounded-lg transition-colors cursor-pointer"
                                   >
                                     <Edit2 className="w-3.5 h-3.5" />
                                   </button>
                                   <button
                                     onClick={() => handleDeleteReview(rev._id || rev.id || '')}
-                                    title="Delete review"
-                                    className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                                    title="Purge log"
+                                    className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-900/20 rounded-lg transition-colors cursor-pointer"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
                                   </button>
@@ -875,12 +875,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
                             {/* Review Title & Comment */}
                             {rev.title && (
-                              <h5 className="font-bold text-slate-900 text-xs">
-                                {rev.title}
+                              <h5 className="font-bold text-cyan-400 text-xs font-mono uppercase">
+                                &gt; {rev.title}
                               </h5>
                             )}
-                            <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
-                              "{rev.comment}"
+                            <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line border-l-2 border-bazaaro-border/50 pl-2">
+                              {rev.comment}
                             </p>
                           </div>
                         );

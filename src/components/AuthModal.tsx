@@ -105,41 +105,41 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
-        {/* Header with Desi Branding */}
-        <div className="px-6 py-5 bg-gradient-to-r from-slate-900 to-amber-950 text-white flex items-center justify-between border-b border-amber-500/20">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-serif text-slate-950 font-black text-sm shadow-sm">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-bazaaro-surface rounded-2xl max-w-md w-full shadow-2xl border border-slate-700/50 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
+        {/* Header */}
+        <div className="px-6 py-5 border-b border-slate-700/50 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-200 font-bold text-sm">
               ब
             </div>
             <div>
-              <h3 className="text-base font-black tracking-tight">
-                {mode === 'login' ? 'Welcome to Bazaaro' : 'Create Bazaaro Account'}
+              <h3 className="text-base font-semibold tracking-tight text-slate-100">
+                {mode === 'login' ? 'Sign In' : 'Create Account'}
               </h3>
-              <p className="text-[11px] text-amber-300 font-medium">Sab kuch, ek bazaar mein.</p>
+              <p className="text-xs text-slate-400">Welcome to Bazaaro</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-slate-400 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-full text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Mode Selector Tabs */}
-        <div className="flex border-b border-slate-200 text-xs font-bold bg-slate-50">
+        <div className="flex border-b border-slate-700/50 text-xs font-semibold bg-slate-900/50">
           <button
             type="button"
             onClick={() => {
               setMode('login');
               setError(null);
             }}
-            className={`flex-1 py-3 border-b-2 text-center transition-all cursor-pointer ${
+            className={`flex-1 py-3.5 border-b-2 text-center transition-all cursor-pointer ${
               mode === 'login'
-                ? 'border-amber-600 text-amber-700 bg-white shadow-2xs'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-slate-400 text-slate-100 bg-slate-800/30 font-medium'
+                : 'border-transparent text-slate-400 hover:text-slate-300'
             }`}
           >
             Sign In
@@ -150,37 +150,37 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
               setMode('register');
               setError(null);
             }}
-            className={`flex-1 py-3 border-b-2 text-center transition-all cursor-pointer ${
+            className={`flex-1 py-3.5 border-b-2 text-center transition-all cursor-pointer ${
               mode === 'register'
-                ? 'border-amber-600 text-amber-700 bg-white shadow-2xs'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-slate-400 text-slate-100 bg-slate-800/30 font-medium'
+                : 'border-transparent text-slate-400 hover:text-slate-300'
             }`}
           >
-            New Customer? Register
+            Register
           </button>
         </div>
 
         {/* Form Body */}
         <div className="p-6 space-y-4">
           {error && (
-            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-600 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-500" />
               <span>{error}</span>
             </div>
           )}
 
           {successMsg && (
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700 flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+            <div className="p-3.5 rounded-xl bg-emerald-900/20 border border-emerald-500/30 text-xs text-emerald-400 flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-500" />
               <span>{successMsg}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+          <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             {mode === 'register' && (
               <>
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Full Name</label>
+                  <label className="block font-medium text-slate-300 mb-1.5">Full Name</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -188,16 +188,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Rahul Sharma"
-                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-hidden"
+                      className="w-full pl-9 pr-3 py-2.5 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors"
                     />
-                    <User className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <User className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Mobile (+91)</label>
-                  <div className="relative flex">
-                    <span className="inline-flex items-center px-2.5 rounded-l-xl border border-r-0 border-slate-300 bg-slate-100 text-slate-500 text-xs">
+                  <label className="block font-medium text-slate-300 mb-1.5">Phone Number (+91)</label>
+                  <div className="relative flex rounded-xl">
+                    <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-700 bg-slate-800/30 text-slate-400 text-xs">
                       +91
                     </span>
                     <input
@@ -206,21 +206,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
                       value={phone}
                       onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                       placeholder="9876543210"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-r-xl focus:border-amber-500 outline-hidden"
+                      className="w-full px-3 py-2.5 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-r-xl focus:border-slate-500 outline-hidden transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Account Role</label>
+                  <label className="block font-medium text-slate-300 mb-1.5">Account Role</label>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => setRole('customer')}
-                      className={`py-1.5 px-3 rounded-xl border text-xs font-semibold text-center transition-all cursor-pointer ${
+                      className={`py-2 px-3 rounded-xl border text-xs font-semibold text-center transition-all cursor-pointer ${
                         role === 'customer'
-                          ? 'border-amber-500 bg-amber-50 text-amber-900 font-bold'
-                          : 'border-slate-200 bg-slate-50 text-slate-600'
+                          ? 'border-slate-500 bg-slate-700 text-slate-100'
+                          : 'border-slate-700 bg-slate-800/50 text-slate-400 hover:text-slate-200'
                       }`}
                     >
                       Customer
@@ -228,10 +228,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
                     <button
                       type="button"
                       onClick={() => setRole('admin')}
-                      className={`py-1.5 px-3 rounded-xl border text-xs font-semibold text-center transition-all cursor-pointer ${
+                      className={`py-2 px-3 rounded-xl border text-xs font-semibold text-center transition-all cursor-pointer ${
                         role === 'admin'
-                          ? 'border-amber-500 bg-amber-50 text-amber-900 font-bold'
-                          : 'border-slate-200 bg-slate-50 text-slate-600'
+                          ? 'border-slate-500 bg-slate-700 text-slate-100'
+                          : 'border-slate-700 bg-slate-800/50 text-slate-400 hover:text-slate-200'
                       }`}
                     >
                       Admin
@@ -242,7 +242,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
             )}
 
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">Email Address</label>
+              <label className="block font-medium text-slate-300 mb-1.5">Email Address</label>
               <div className="relative">
                 <input
                   type="email"
@@ -250,14 +250,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-hidden"
+                  className="w-full pl-9 pr-3 py-2.5 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors"
                 />
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
               </div>
             </div>
 
             <div>
-              <label className="block font-semibold text-slate-700 mb-1">Password</label>
+              <label className="block font-medium text-slate-300 mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type="password"
@@ -265,25 +265,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-hidden"
+                  className="w-full pl-9 pr-3 py-2.5 bg-slate-800/50 border border-slate-700 text-slate-200 rounded-xl focus:border-slate-500 outline-hidden transition-colors"
                 />
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
               </div>
               {mode === 'register' && (
-                <p className="text-[10px] text-slate-400 mt-1">Minimum 6 characters. Stored securely with bcrypt.</p>
+                <p className="text-[10px] text-slate-400 mt-1.5">Minimum 6 characters.</p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 disabled:opacity-50 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-white disabled:bg-slate-700 disabled:text-slate-500 text-slate-900 font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
             >
               {loading ? (
                 <span>Please wait...</span>
               ) : (
                 <>
-                  <span>{mode === 'login' ? 'Sign In to Bazaaro' : 'Create Account'}</span>
+                  <span>{mode === 'login' ? 'Sign In' : 'Create Account'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </>
               )}
@@ -291,30 +291,30 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
           </form>
 
           {/* Demo Credentials Helper */}
-          <div className="pt-3 border-t border-slate-100">
-            <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 mb-2">
-              <span className="flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Demo Credentials:
+          <div className="pt-4 border-t border-slate-700/50">
+            <div className="flex items-center justify-between text-xs font-medium text-slate-400 mb-2">
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-slate-400" /> Demo Credentials:
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-[11px]">
+            <div className="grid grid-cols-2 gap-3 text-xs">
               <button
                 type="button"
                 onClick={() => fillDemoCredentials('customer')}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-amber-50 hover:border-amber-300 border border-slate-200 text-left transition-colors cursor-pointer"
+                className="p-2.5 rounded-xl bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 text-left transition-colors cursor-pointer"
               >
-                <strong className="text-slate-800 block">Customer</strong>
-                <span className="text-slate-500 text-[10px]">rahul@bazaaro.in</span>
+                <strong className="text-slate-200 block font-medium">Customer</strong>
+                <span className="text-slate-400 text-[11px]">rahul@bazaaro.in</span>
               </button>
               <button
                 type="button"
                 onClick={() => fillDemoCredentials('admin')}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-amber-50 hover:border-amber-300 border border-slate-200 text-left transition-colors cursor-pointer"
+                className="p-2.5 rounded-xl bg-slate-800/40 hover:bg-slate-800 border border-slate-700/60 text-left transition-colors cursor-pointer"
               >
-                <strong className="text-amber-800 block flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-amber-600" /> Admin
+                <strong className="text-slate-200 block font-medium flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-slate-400" /> Admin
                 </strong>
-                <span className="text-slate-500 text-[10px]">admin@bazaaro.in</span>
+                <span className="text-slate-400 text-[11px]">admin@bazaaro.in</span>
               </button>
             </div>
           </div>

@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { Product } from '../models/Product';
 import { authenticateToken, requireAdmin } from '../middleware/auth';
+import { isDbConnected } from '../config/db';
+import { PRODUCTS } from '../../src/data/products';
 
 const router = express.Router();
 
@@ -19,8 +21,53 @@ router.get('/', async (req: Request, res: Response) => {
       onlyMadeInIndia,
       sortBy = 'featured',
       page = '1',
-      limit = '50',
+      limit = '100',
     } = req.query;
+
+    // Fallback when database is disconnected: query and sort PRODUCTS in memory
+    if (!isDbConnected()) {
+      let filtered = PRODUCTS.filter((p) => {
+        if (category && category !== 'all' && p.category !== category) return false;
+        if (brand && typeof brand === 'string' && brand.trim() && p.brand.toLowerCase() !== (brand as string).trim().toLowerCase()) return false;
+        if (search && typeof search === 'string' && search.trim()) {
+          const s = (search as string).trim().toLowerCase();
+          const matchName = p.name.toLowerCase().includes(s);
+          const matchBrand = p.brand.toLowerCase().includes(s);
+          const matchCat = p.category.toLowerCase().includes(s);
+          const matchTag = p.tags.some((t) => t.toLowerCase().includes(s));
+          const matchDesc = p.description.toLowerCase().includes(s);
+          if (!matchName && !matchBrand && !matchCat && !matchTag && !matchDesc) return false;
+        }
+        if (minPrice && p.price < Number(minPrice)) return false;
+        if (maxPrice && p.price > Number(maxPrice)) return false;
+        if (rating && p.rating < Number(rating)) return false;
+        if (onlyInStock === 'true' && !p.inStock) return false;
+        if (onlyMadeInIndia === 'true' && !p.madeInIndia) return false;
+        return true;
+      });
+
+      if (sortBy === 'price-asc') filtered.sort((a, b) => a.price - b.price);
+      else if (sortBy === 'price-desc') filtered.sort((a, b) => b.price - a.price);
+      else if (sortBy === 'rating') filtered.sort((a, b) => b.rating - a.rating);
+      else if (sortBy === 'discount') filtered.sort((a, b) => b.discountPercent - a.discountPercent);
+      else filtered.sort((a, b) => b.rating - a.rating || b.reviewCount - a.reviewCount);
+
+      const pageNum = Math.max(1, parseInt(page as string) || 1);
+      const limitNum = Math.min(100, Math.max(1, parseInt(limit as string) || 100));
+      const skip = (pageNum - 1) * limitNum;
+      const paginated = filtered.slice(skip, skip + limitNum);
+      const availableBrands = Array.from(new Set(PRODUCTS.map((p) => p.brand))).sort();
+
+      return res.json({
+        success: true,
+        count: paginated.length,
+        total: filtered.length,
+        page: pageNum,
+        pages: Math.ceil(filtered.length / limitNum),
+        products: paginated,
+        availableBrands,
+      });
+    }
 
     const query: any = { isActive: { $ne: false } };
 
@@ -122,6 +169,14 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
+    if (!isDbConnected()) {
+      const product = PRODUCTS.find((p) => p.id === id);
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+      return res.json({ success: true, product });
+    }
+
     const queryOr: any[] = [{ id }];
     if (mongoose.isValidObjectId(id)) {
       queryOr.push({ _id: id });
@@ -130,6 +185,11 @@ router.get('/:id', async (req: Request, res: Response) => {
     const product = await Product.findOne({ $or: queryOr, isActive: { $ne: false } }).lean();
 
     if (!product) {
+      // Check fallback in PRODUCTS
+      const fallbackProd = PRODUCTS.find((p) => p.id === id);
+      if (fallbackProd) {
+        return res.json({ success: true, product: fallbackProd });
+      }
       return res.status(404).json({ error: 'Product not found' });
     }
 
@@ -139,6 +199,10 @@ router.get('/:id', async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error('[Product Detail Error]', error);
+    const fallbackProd = PRODUCTS.find((p) => p.id === req.params.id);
+    if (fallbackProd) {
+      return res.json({ success: true, product: fallbackProd });
+    }
     return res.status(500).json({ error: 'Failed to retrieve product details' });
   }
 });

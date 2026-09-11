@@ -21,70 +21,70 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs flex justify-end">
-      <div className="w-full max-w-md bg-white h-full shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-300">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-md flex justify-end">
+      <div className="w-full max-w-md bg-bazaaro-surface h-full shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-300 border-l border-slate-700/50">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
-          <div className="flex items-center gap-2">
+        <div className="px-6 py-5 border-b border-slate-700/50 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
             <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
-            <h3 className="font-bold text-slate-900 text-base">Your Wishlist</h3>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 font-semibold">
+            <h3 className="font-semibold text-slate-100 text-lg tracking-wide">Your Wishlist</h3>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-medium ml-1">
               {wishlist.length}
             </span>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-full text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+            className="p-2 rounded-full text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-3">
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {wishlist.length === 0 ? (
-            <div className="text-center py-16 space-y-3">
-              <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto">
-                <Heart className="w-7 h-7" />
+            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center h-full">
+              <div className="w-20 h-20 rounded-full bg-slate-800/50 flex items-center justify-center mb-5">
+                <Heart className="w-8 h-8 text-slate-400" />
               </div>
-              <h4 className="text-base font-bold text-slate-800">Your Wishlist is Empty</h4>
-              <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                Save smartphones, headphones, and gaming gear you love to keep track of festive discounts.
+              <h4 className="text-lg font-semibold text-slate-200 mb-2">Your Wishlist is Empty</h4>
+              <p className="text-sm text-slate-500 max-w-xs mx-auto">
+                Save gear you love to keep track of price drops.
               </p>
             </div>
           ) : (
             wishlist.map((prod) => (
               <div
                 key={prod.id}
-                className="p-3.5 rounded-2xl border border-slate-200/80 bg-white flex items-center gap-3 shadow-2xs"
+                className="p-3 rounded-xl border border-transparent hover:border-slate-700 bg-slate-800/20 flex items-center gap-4 transition-colors"
               >
                 <img
                   src={prod.images[0]}
                   alt={prod.name}
                   referrerPolicy="no-referrer"
-                  className="w-16 h-16 object-contain rounded-xl bg-slate-50 p-1 border border-slate-100 shrink-0"
+                  className="w-20 h-20 object-contain rounded-xl bg-[#F5F5F7] mix-blend-multiply p-2 shrink-0"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs font-bold text-slate-900 truncate">{prod.name}</div>
-                  <div className="text-[11px] text-slate-500">{prod.brand}</div>
-                  <div className="text-xs font-black text-slate-900 mt-1">
+                  <div className="text-[10px] uppercase font-semibold text-slate-400 mb-1 tracking-wider">{prod.brand}</div>
+                  <div className="text-sm font-semibold text-slate-200 truncate mb-1">{prod.name}</div>
+                  <div className="text-sm font-semibold text-slate-100">
                     {formatINR(prod.price)}
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1.5 shrink-0">
+                <div className="flex flex-col gap-2 shrink-0">
                   <button
                     onClick={() => {
                       onAddToCart(prod);
                     }}
-                    className="p-2 bg-slate-900 hover:bg-amber-600 text-white rounded-xl transition-colors cursor-pointer"
+                    className="p-2 bg-slate-100 hover:bg-white text-slate-900 rounded-xl transition-colors cursor-pointer shadow-xs"
                     title="Add to Bag"
                   >
-                    <ShoppingBag className="w-4 h-4 text-amber-400" />
+                    <ShoppingBag className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => onRemoveWishlist(prod)}
-                    className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
+                    className="p-2 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-colors cursor-pointer"
                     title="Remove"
                   >
                     <Trash2 className="w-4 h-4" />

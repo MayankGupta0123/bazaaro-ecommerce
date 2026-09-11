@@ -2,12 +2,29 @@ import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { Category } from '../models/Category';
 import { authenticateToken, requireAdmin } from '../middleware/auth';
+import { isDbConnected } from '../config/db';
+import { CATEGORIES } from '../../src/data/products';
 
 const router = express.Router();
 
 // GET /api/categories - Public list of active categories
 router.get('/', async (_req: Request, res: Response) => {
   try {
+    if (!isDbConnected()) {
+      const fallbackCategories = CATEGORIES.filter((c) => c.key !== 'all').map((cat, idx) => ({
+        key: cat.key,
+        label: cat.label,
+        iconName: cat.iconName,
+        isActive: true,
+        displayOrder: idx + 1,
+      }));
+      return res.json({
+        success: true,
+        count: fallbackCategories.length,
+        categories: fallbackCategories,
+      });
+    }
+
     const categories = await Category.find({ isActive: true }).sort({ displayOrder: 1 }).lean();
 
     return res.json({
@@ -17,7 +34,18 @@ router.get('/', async (_req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error('[Categories List Error]', error);
-    return res.status(500).json({ error: 'Failed to fetch categories' });
+    const fallbackCategories = CATEGORIES.filter((c) => c.key !== 'all').map((cat, idx) => ({
+      key: cat.key,
+      label: cat.label,
+      iconName: cat.iconName,
+      isActive: true,
+      displayOrder: idx + 1,
+    }));
+    return res.json({
+      success: true,
+      count: fallbackCategories.length,
+      categories: fallbackCategories,
+    });
   }
 });
 
