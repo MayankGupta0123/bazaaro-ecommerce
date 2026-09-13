@@ -16,7 +16,11 @@ services:
         sync: false
       - key: ZAPUPI_KEY_ID
         sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
       - key: ZAPUPI_ENV
         value: sandbox
       - key: JWT_SECRET
         generateValue: true
+      - key: PUBLIC_BASE_URL
+        sync: false

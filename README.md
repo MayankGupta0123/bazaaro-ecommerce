@@ -62,15 +62,21 @@ An enterprise-grade full-stack Indian electronics e-commerce web application bui
    ```
 
 3. **Configure environment variables**:
-   Create a `.env` file in the root directory based on `.env.example`:
+   Copy `.env.example` to create your local `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Fill in your credentials inside `.env`:
    ```env
-   MONGODB_URI="mongodb+srv://<username>:<password>@cluster0.mongodb.net/?appName=Cluster0"
+   MONGODB_URI="mongodb+srv://<username>:<password>@cluster0.mongodb.net/bazaaro?retryWrites=true&w=majority"
    GEMINI_API_KEY="your_gemini_api_key"
+   GEMINI_MODEL="gemini-3.5-flash-lite"
    ZAPUPI_KEY_ID="your_zapupi_key_id"
    ZAPUPI_ENV="sandbox"
    JWT_SECRET="your_secure_jwt_secret"
    PORT=3000
    NODE_ENV="development"
+   PUBLIC_BASE_URL="http://localhost:3000"
    ```
 
 4. **Start development server**:
@@ -79,7 +85,12 @@ An enterprise-grade full-stack Indian electronics e-commerce web application bui
    ```
    Open `http://localhost:3000` in your browser.
 
-5. **Build for production**:
+5. **Default Test Accounts**:
+   When launched for the first time, MongoDB automatically seeds demo accounts for testing:
+   - **Administrator**: `admin@bazaaro.in` / `Admin@123` (Access `/admin`)
+   - **Customer**: `rahul@bazaaro.in` / `Customer@123`
+
+6. **Build for production**:
    ```bash
    npm run build
    npm start
@@ -87,15 +98,35 @@ An enterprise-grade full-stack Indian electronics e-commerce web application bui
 
 ---
 
-## ☁️ Deployment
+## ☁️ Deployment (Render.com)
 
-The project includes pre-configured deployment blueprints:
-- **`render.yaml`**: Ready for 1-click Web Service deployment on [Render.com](https://render.com).
-- **`Procfile`**: Ready for deployment on Railway / Heroku.
+Bazaaro is pre-configured for 1-click or Git-based deployment on **[Render.com](https://render.com)** using [`render.yaml`](./render.yaml).
 
-Webhook URL endpoint for payment gateways:
+### Deploying to Render:
+1. Push your latest code to your **GitHub repository**.
+2. Log into the [Render Dashboard](https://dashboard.render.com/) and click **New +** ➔ **Web Service**.
+3. Connect your `bazaaro-ecommerce` GitHub repository.
+4. Configure the service settings:
+   - **Environment**: `Node`
+   - **Region**: `Singapore` (Recommended for low latency across India)
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+   - **Health Check Path**: `/api/health`
+5. Under **Environment Variables**, add the required secrets:
+   - `NODE_ENV` = `production`
+   - `MONGODB_URI` = Your MongoDB Atlas connection URI
+   - `GEMINI_API_KEY` = Your Google Gemini API Key
+   - `GEMINI_MODEL` = `gemini-3.5-flash-lite`
+   - `ZAPUPI_KEY_ID` = Your ZapUPI Key ID
+   - `ZAPUPI_ENV` = `sandbox` (or `production`)
+   - `JWT_SECRET` = A strong secret string for JWT auth tokens
+   - `PUBLIC_BASE_URL` = `https://<your-service-name>.onrender.com`
+6. Click **Deploy Web Service**.
+
+### Payment Webhook URL
+Once deployed on Render, configure your webhook endpoint in your ZapUPI dashboard:
 ```
-https://<YOUR_DOMAIN>/api/payment/webhook
+https://<your-service-name>.onrender.com/api/payment/webhook
 ```
 
 ---
