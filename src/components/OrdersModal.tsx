@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Package, Truck, CheckCircle2, Clock, MapPin, Printer, ShieldCheck, AlertCircle, RefreshCw } from 'lucide-react';
 import { Order } from '../types';
 import { formatINR } from '../utils/format';
+import { printOrderReceipt } from '../utils/printReceipt';
 
 interface OrdersModalProps {
   isOpen: boolean;
@@ -202,7 +203,7 @@ export const OrdersModal: React.FC<OrdersModalProps> = ({
                       </button>
                     )}
                     <button
-                      onClick={() => window.print()}
+                      onClick={() => printOrderReceipt(order)}
                       className="text-slate-400 hover:text-slate-200 font-medium text-xs flex items-center gap-1.5 cursor-pointer"
                     >
                       <Printer className="w-4 h-4" />

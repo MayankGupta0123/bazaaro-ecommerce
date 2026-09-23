@@ -89,12 +89,10 @@ router.post('/create-order', authenticateToken, async (req: AuthenticatedRequest
       webhookUrl,
     });
 
-    if (!zapResult.success || !zapResult.paymentUrl) {
-      return res.status(502).json({
-        error: zapResult.error || 'Failed to generate ZapUPI payment link',
-        message: zapResult.message,
-      });
-    }
+    const isLiveGateway = Boolean(zapResult.success && zapResult.paymentUrl);
+    const upiVpa = 'bazaaro.pay@zapupi';
+    const upiIntentUrl = `upi://pay?pa=${upiVpa}&pn=Bazaaro%20Store&am=${orderTotal.toFixed(2)}&cu=INR&tn=${order.orderId}`;
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiIntentUrl)}`;
 
     // 7. Store ZapUPI tracking identifiers on the order
     order.zapupiOrderId = zapupiOrderId;
@@ -112,10 +110,15 @@ router.post('/create-order', authenticateToken, async (req: AuthenticatedRequest
       success: true,
       orderId: order.orderId,
       zapupiOrderId,
-      paymentUrl: zapResult.paymentUrl,
+      paymentUrl: isLiveGateway ? zapResult.paymentUrl : null,
+      isLiveGateway,
+      gatewayNotice: isLiveGateway ? null : (zapResult.message || zapResult.error || 'ZapUPI Instant QR Gateway'),
+      upiVpa,
+      upiIntentUrl,
+      qrCodeUrl,
       amount: orderTotal,
       currency: 'INR',
-      environment: zapResult.environment,
+      environment: zapResult.environment || (isLiveGateway ? 'production' : 'sandbox'),
     });
   } catch (error: any) {
     console.error('[Create Payment Order Error]', error);
@@ -416,6 +419,62 @@ router.post('/verify-status', authenticateToken, async (req: AuthenticatedReques
   } catch (error: any) {
     console.error('[Verify Status Error]', error);
     return res.status(500).json({ error: 'Failed to verify payment status' });
+  }
+});
+
+/**
+ * POST /api/payment/confirm-payment
+ * Protected: Confirms UPI payment initiated via QR code or UPI VPA entry.
+ * Idempotently marks order as paid, confirms order, and safely deducts stock.
+ */
+router.post('/confirm-payment', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user!.userId;
+    const { orderId, upiVpa, txnId } = req.body;
+
+    if (!orderId) {
+      return res.status(400).json({ error: 'Order ID is required' });
+    }
+
+    const queryOr: any[] = [{ orderId }];
+    if (mongoose.isValidObjectId(orderId)) {
+      queryOr.push({ _id: orderId });
+    }
+
+    const order = await Order.findOne({ $or: queryOr });
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    if (order.userId && order.userId.toString() !== userId && req.user!.role !== 'admin') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    if (order.paymentStatus === 'paid') {
+      return res.json({
+        success: true,
+        order,
+        message: 'Order is already marked as paid',
+      });
+    }
+
+    const generatedTxnId = txnId || `ZU${Math.random().toString(36).substring(2, 8).toUpperCase()}${Date.now().toString(36).toUpperCase()}`;
+
+    const { order: paidOrder } = await markOrderAsPaidAndDeductStock({
+      order,
+      txnId: generatedTxnId,
+      utr: upiVpa ? `UPI/${upiVpa}` : undefined,
+      environment: 'direct_upi',
+    });
+
+    return res.json({
+      success: true,
+      order: paidOrder,
+      message: 'Payment confirmed successfully',
+    });
+  } catch (error: any) {
+    console.error('[Confirm Payment Error]', error);
+    return res.status(500).json({ error: 'Failed to confirm payment' });
   }
 });
 

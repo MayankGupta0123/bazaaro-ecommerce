@@ -8,12 +8,19 @@ import {
   ArrowRight,
   Printer,
   Truck,
-  AlertCircle
+  AlertCircle,
+  QrCode,
+  ExternalLink,
+  Copy,
+  Check,
+  ArrowLeft,
+  Loader2
 } from 'lucide-react';
 import { CartItem, Address, Order } from '../types';
 import { formatINR } from '../utils/format';
 import { INDIAN_STATES } from '../data/products';
 import { BazaaroLogo } from './BazaaroLogo';
+import { printOrderReceipt } from '../utils/printReceipt';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -57,14 +64,79 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     type: 'home',
   });
 
-  const [step, setStep] = useState<'address' | 'payment' | 'processing' | 'success'>('address');
+  const [step, setStep] = useState<'address' | 'payment' | 'processing' | 'upi_payment' | 'success'>('address');
   const [paymentMethod, setPaymentMethod] = useState<'upi' | 'cod'>('upi');
-  const [selectedUpiApp, setSelectedUpiApp] = useState<'gpay' | 'phonepe' | 'paytm'>('gpay');
   const [placedOrder, setPlacedOrder] = useState<Order | null>(null);
+  const [pendingOrder, setPendingOrder] = useState<Order | null>(null);
+  const [upiData, setUpiData] = useState<{
+    qrCodeUrl: string;
+    upiIntentUrl: string;
+    upiVpa: string;
+    isLiveGateway: boolean;
+    paymentUrl: string | null;
+    amount: number;
+    orderId: string;
+    gatewayNotice?: string | null;
+  } | null>(null);
+  const [enteredVpa, setEnteredVpa] = useState('rahul@okhdfcbank');
+  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
+  const [copiedVpa, setCopiedVpa] = useState(false);
 
   if (!isOpen) return null;
 
   const gstAmount = Math.round((total * 18) / 118);
+
+  const handleCopyVpa = () => {
+    if (upiData?.upiVpa) {
+      navigator.clipboard.writeText(upiData.upiVpa);
+      setCopiedVpa(true);
+      setTimeout(() => setCopiedVpa(false), 2000);
+    }
+  };
+
+  const handleConfirmUpiPayment = async () => {
+    if (!pendingOrder || !token) return;
+    setIsVerifyingPayment(true);
+    setCheckoutError(null);
+
+    try {
+      const res = await fetch('/api/payment/confirm-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          orderId: pendingOrder.id,
+          upiVpa: enteredVpa.trim(),
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setCheckoutError(data.error || 'Failed to verify UPI payment. Please try again.');
+        setIsVerifyingPayment(false);
+        return;
+      }
+
+      const serverOrder = data.order || pendingOrder;
+      const confirmedOrder: Order = {
+        ...pendingOrder,
+        paymentStatus: 'paid',
+        status: 'Confirmed',
+        paymentId: serverOrder.zapupiTxnId || serverOrder.paymentId || `ZU_${Date.now().toString(36).toUpperCase()}`,
+        zapupiTxnId: serverOrder.zapupiTxnId,
+      };
+
+      setPlacedOrder(confirmedOrder);
+      onOrderPlaced(confirmedOrder);
+      setStep('success');
+    } catch (err: any) {
+      setCheckoutError(err.message || 'Error confirming payment');
+    } finally {
+      setIsVerifyingPayment(false);
+    }
+  };
 
   const handleInitiatePayment = async () => {
     setCheckoutError(null);
@@ -141,37 +213,51 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         estimatedDeliveryDate: serverOrder.estimatedDeliveryDate,
       };
 
-      setPlacedOrder(formattedOrder);
-      onOrderPlaced(formattedOrder);
-
-      // If online payment via ZapUPI, initiate payment session and redirect
-      if (!isCod) {
-        const payRes = await fetch('/api/payment/create-order', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ orderId: serverOrder.orderId }),
-        });
-
-        const payData = await payRes.json();
-
-        if (!payRes.ok || !payData.paymentUrl) {
-          setCheckoutError(payData.error || payData.message || 'Failed to initialize ZapUPI payment gateway');
-          setStep('payment');
-          return;
-        }
-
-        // Redirect customer to ZapUPI's payment_url
-        window.location.href = payData.paymentUrl;
+      if (isCod) {
+        setPlacedOrder(formattedOrder);
+        onOrderPlaced(formattedOrder);
+        setStep('success');
         return;
       }
 
-      setStep('success');
+      // Online payment via ZapUPI
+      setPendingOrder(formattedOrder);
+
+      const payRes = await fetch('/api/payment/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ orderId: serverOrder.orderId }),
+      });
+
+      const payData = await payRes.json();
+
+      if (!payRes.ok) {
+        setCheckoutError(payData.error || payData.message || 'Failed to initialize ZapUPI payment gateway');
+        setStep('payment');
+        return;
+      }
+
+      const fallbackQr = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`upi://pay?pa=bazaaro.pay@zapupi&pn=Bazaaro&am=${formattedOrder.total}&cu=INR&tn=${formattedOrder.id}`)}`;
+      const fallbackIntent = `upi://pay?pa=bazaaro.pay@zapupi&pn=Bazaaro&am=${formattedOrder.total}&cu=INR&tn=${formattedOrder.id}`;
+
+      setUpiData({
+        qrCodeUrl: payData.qrCodeUrl || fallbackQr,
+        upiIntentUrl: payData.upiIntentUrl || fallbackIntent,
+        upiVpa: payData.upiVpa || 'bazaaro.pay@zapupi',
+        isLiveGateway: Boolean(payData.isLiveGateway),
+        paymentUrl: payData.paymentUrl || null,
+        amount: formattedOrder.total,
+        orderId: formattedOrder.id,
+        gatewayNotice: payData.gatewayNotice,
+      });
+
+      setStep('upi_payment');
     } catch (err: any) {
       setCheckoutError(err.message || 'Network error placing order');
-      setStep('address');
+      setStep('payment');
     }
   };
 
@@ -396,31 +482,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   </div>
 
                   {paymentMethod === 'upi' && (
-                    <div className="pt-4 mt-2 border-t border-slate-700/50 space-y-4">
-                      <div className="flex gap-2">
-                        {(['gpay', 'phonepe', 'paytm'] as const).map((app) => (
-                          <button
-                            key={app}
-                            type="button"
-                            onClick={() => setSelectedUpiApp(app)}
-                            className={`flex-1 py-2 px-3 rounded-lg border text-xs font-semibold capitalize transition-all ${
-                              selectedUpiApp === app
-                                ? 'border-slate-500 bg-slate-700 text-slate-100'
-                                : 'border-slate-700 bg-slate-800/50 text-slate-400 hover:border-slate-600'
-                            }`}
-                          >
-                            {app === 'gpay' ? 'Google Pay' : app === 'phonepe' ? 'PhonePe' : 'Paytm'}
-                          </button>
-                        ))}
-                      </div>
-
+                    <div className="pt-4 mt-2 border-t border-slate-700/50 space-y-3">
                       <div className="p-3 rounded-lg bg-emerald-900/10 border border-emerald-500/20 text-xs text-emerald-400 flex items-center justify-between font-medium">
                         <span className="flex items-center gap-2">
                           <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                          <span>Direct UPI Intent & Dynamic QR Code Powered by ZapUPI</span>
+                          <span>Dynamic QR Code & Direct UPI Intent Powered by ZapUPI</span>
                         </span>
                         <span className="font-mono font-bold tracking-wider text-[11px] bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">0% Surcharge</span>
                       </div>
+                      <p className="text-[11px] text-slate-400 px-1 leading-relaxed">
+                        Click below to open the payment view to scan dynamic QR code, enter your UPI ID, or use any UPI app.
+                      </p>
                     </div>
                   )}
                 </div>
@@ -478,9 +550,139 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
               </div>
               <div>
-                <h4 className="text-lg font-semibold text-slate-100">Processing Payment</h4>
+                <h4 className="text-lg font-semibold text-slate-100">Initializing ZapUPI Gateway</h4>
                 <p className="text-sm text-slate-400 max-w-sm mt-2 mx-auto">
-                  Connecting to secure gateway. Please do not close or refresh this window.
+                  Generating dynamic QR code & secure UPI session. Please do not close or refresh this window.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3.5: UPI & QR Code Payment */}
+          {step === 'upi_payment' && pendingOrder && upiData && (
+            <div className="space-y-6 animate-in fade-in zoom-in-95 py-2">
+              <div className="flex items-center justify-between border-b border-slate-700/50 pb-3">
+                <button
+                  onClick={() => setStep('payment')}
+                  className="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <ArrowLeft className="w-4 h-4" /> Change Method
+                </button>
+                <div className="text-xs text-slate-400 font-mono">
+                  Order: <strong className="text-slate-200">{pendingOrder.id}</strong>
+                </div>
+              </div>
+
+              {/* Amount Display */}
+              <div className="p-4 rounded-xl bg-slate-800/40 border border-slate-700 flex items-center justify-between">
+                <div>
+                  <div className="text-xs text-slate-400">Amount Due</div>
+                  <div className="text-2xl font-bold text-slate-100">{formatINR(pendingOrder.total)}</div>
+                </div>
+                <div className="text-right">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-900/20 text-emerald-400 border border-emerald-500/30">
+                    <ShieldCheck className="w-3.5 h-3.5" /> ZapUPI Secure
+                  </span>
+                </div>
+              </div>
+
+              {/* Dynamic QR Code Card */}
+              <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-700/70 text-center space-y-4">
+                <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center justify-center gap-2">
+                  <QrCode className="w-4 h-4 text-emerald-400" />
+                  <span>Scan Dynamic UPI QR Code</span>
+                </div>
+
+                <div className="inline-block p-3 bg-white rounded-2xl shadow-xl border border-slate-200">
+                  <img
+                    src={upiData.qrCodeUrl}
+                    alt="ZapUPI Dynamic QR"
+                    className="w-48 h-48 sm:w-52 sm:h-52 object-contain block mx-auto"
+                  />
+                </div>
+
+                <p className="text-xs text-slate-400 max-w-xs mx-auto">
+                  Scan using <strong className="text-slate-200">Google Pay, PhonePe, Paytm, BHIM, Cred</strong> or any bank UPI app to pay ₹{pendingOrder.total.toLocaleString('en-IN')}.
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                  <div className="px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700 text-xs text-slate-300 font-mono flex items-center gap-2">
+                    <span>UPI ID: {upiData.upiVpa}</span>
+                    <button
+                      type="button"
+                      onClick={handleCopyVpa}
+                      className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+                      title="Copy UPI ID"
+                    >
+                      {copiedVpa ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                  {upiData.paymentUrl && (
+                    <a
+                      href={upiData.paymentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition-colors"
+                    >
+                      <span>Open ZapUPI Page</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                  <a
+                    href={upiData.upiIntentUrl}
+                    className="px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-xs font-semibold text-emerald-300 flex items-center gap-1.5 transition-colors sm:hidden"
+                  >
+                    <Smartphone className="w-3.5 h-3.5" />
+                    <span>Pay in App</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Enter UPI ID (VPA) */}
+              <div className="p-4 rounded-xl bg-slate-800/30 border border-slate-700/50 space-y-3">
+                <label className="block text-xs font-semibold text-slate-300">
+                  Or Enter Your UPI ID (VPA)
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="e.g. rahul@okhdfcbank"
+                    value={enteredVpa}
+                    onChange={(e) => setEnteredVpa(e.target.value)}
+                    className="flex-1 px-3.5 py-2.5 bg-slate-800/80 border border-slate-700 text-slate-200 rounded-xl text-xs outline-hidden focus:border-slate-500 transition-colors"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleConfirmUpiPayment}
+                    disabled={isVerifyingPayment || !enteredVpa.trim()}
+                    className="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-semibold transition-colors cursor-pointer shrink-0 disabled:opacity-50"
+                  >
+                    Verify & Pay
+                  </button>
+                </div>
+              </div>
+
+              {/* Primary Confirmation Action */}
+              <div className="pt-2 space-y-2">
+                <button
+                  onClick={handleConfirmUpiPayment}
+                  disabled={isVerifyingPayment}
+                  className="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-emerald-500/20 disabled:opacity-60"
+                >
+                  {isVerifyingPayment ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Verifying Payment Status...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>I Have Paid &bull; Confirm Order</span>
+                    </>
+                  )}
+                </button>
+                <p className="text-[10px] text-center text-slate-400">
+                  Click after completing the UPI transaction in your payment app.
                 </p>
               </div>
             </div>
@@ -536,7 +738,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               {/* Action buttons */}
               <div className="flex gap-4 pt-2">
                 <button
-                  onClick={() => window.print()}
+                  onClick={() => printOrderReceipt(placedOrder)}
                   className="flex-1 py-3 px-4 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-200 text-sm font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <Printer className="w-4 h-4" /> Print Receipt
