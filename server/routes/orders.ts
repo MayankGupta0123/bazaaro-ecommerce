@@ -148,8 +148,8 @@ router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Respo
         landmark: address.landmark?.trim() || '',
         type: address.type === 'work' ? 'work' : 'home',
       },
-      paymentMethod: paymentMethod || 'Razorpay Test Mode (Pending)',
-      paymentId: `pay_pending_${Math.random().toString(36).substring(2, 10)}`,
+      paymentMethod: paymentMethod || 'ZapUPI (Pending)',
+      paymentId: `zap_pending_${Math.random().toString(36).substring(2, 10)}`,
       paymentStatus: 'pending', // Maintained as pending for Phase 6
       status: 'Placed',
       courier: 'BlueDart Express',

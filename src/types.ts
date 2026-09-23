@@ -59,7 +59,6 @@ export interface Order {
   address: Address;
   paymentMethod: string;
   paymentId?: string;
-  razorpayOrderId?: string;
   zapupiOrderId?: string;
   zapupiTxnId?: string;
   utr?: string;

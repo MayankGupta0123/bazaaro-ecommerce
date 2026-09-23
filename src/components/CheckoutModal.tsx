@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   X,
   ShieldCheck,
-  CreditCard,
   Smartphone,
-  Building,
   CheckCircle2,
   Lock,
   ArrowRight,
   Printer,
-  Sparkles,
-  Settings,
-  HelpCircle,
   Truck,
   AlertCircle
 } from 'lucide-react';
@@ -63,42 +58,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   });
 
   const [step, setStep] = useState<'address' | 'payment' | 'processing' | 'success'>('address');
-  const [paymentMethod, setPaymentMethod] = useState<'razorpay_upi' | 'razorpay_card' | 'razorpay_netbanking' | 'cod'>('razorpay_upi');
+  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'cod'>('upi');
   const [selectedUpiApp, setSelectedUpiApp] = useState<'gpay' | 'phonepe' | 'paytm'>('gpay');
-  const [upiVpa, setUpiVpa] = useState('rahul@okhdfcbank');
-
-  // Test card states
-  const [cardNumber, setCardNumber] = useState('4111 1111 1111 1111');
-  const [cardExpiry, setCardExpiry] = useState('12/28');
-  const [cardCvv, setCardCvv] = useState('123');
-  const [cardHolder, setCardHolder] = useState('RAHUL SHARMA');
-
-  // Razorpay configuration state
-  const [razorpayKeyId, setRazorpayKeyId] = useState<string>('');
-  const [showKeyConfig, setShowKeyConfig] = useState(false);
-  const [customKeyInput, setCustomKeyInput] = useState('');
   const [placedOrder, setPlacedOrder] = useState<Order | null>(null);
-
-  useEffect(() => {
-    // Fetch razorpay key config from backend
-    fetch('/api/payment/config')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.razorpayKeyId) {
-          setRazorpayKeyId(data.razorpayKeyId);
-        }
-      })
-      .catch((err) => console.log('Payment config fetch error:', err));
-  }, []);
 
   if (!isOpen) return null;
 
   const gstAmount = Math.round((total * 18) / 118);
-
-  const handleSaveCustomKey = () => {
-    setRazorpayKeyId(customKeyInput.trim());
-    setShowKeyConfig(false);
-  };
 
   const handleInitiatePayment = async () => {
     setCheckoutError(null);
@@ -404,32 +370,32 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
               {/* Payment Methods Tabs */}
               <div className="space-y-3">
-                {/* 1. UPI */}
+                {/* 1. ZapUPI Online Gateway */}
                 <div
-                  onClick={() => setPaymentMethod('razorpay_upi')}
+                  onClick={() => setPaymentMethod('upi')}
                   className={`p-4 rounded-xl border transition-all cursor-pointer ${
-                    paymentMethod === 'razorpay_upi'
+                    paymentMethod === 'upi'
                       ? 'border-slate-500 bg-slate-800/50'
                       : 'border-slate-700/50 bg-transparent hover:border-slate-600'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <Smartphone className={`w-5 h-5 ${paymentMethod === 'razorpay_upi' ? 'text-slate-200' : 'text-slate-500'}`} />
+                      <Smartphone className={`w-5 h-5 ${paymentMethod === 'upi' ? 'text-slate-200' : 'text-slate-500'}`} />
                       <div>
-                        <div className="text-sm font-medium text-slate-200">UPI (Recommended)</div>
-                        <div className="text-xs text-slate-500 mt-0.5">Google Pay, PhonePe, Paytm, BHIM</div>
+                        <div className="text-sm font-medium text-slate-200">Instant UPI & QR Code (Recommended)</div>
+                        <div className="text-xs text-slate-500 mt-0.5">Google Pay, PhonePe, Paytm, BHIM, Cred & Any UPI App</div>
                       </div>
                     </div>
                     <input
                       type="radio"
-                      checked={paymentMethod === 'razorpay_upi'}
-                      onChange={() => setPaymentMethod('razorpay_upi')}
+                      checked={paymentMethod === 'upi'}
+                      onChange={() => setPaymentMethod('upi')}
                       className="accent-slate-200 w-4 h-4"
                     />
                   </div>
 
-                  {paymentMethod === 'razorpay_upi' && (
+                  {paymentMethod === 'upi' && (
                     <div className="pt-4 mt-2 border-t border-slate-700/50 space-y-4">
                       <div className="flex gap-2">
                         {(['gpay', 'phonepe', 'paytm'] as const).map((app) => (
@@ -448,105 +414,38 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                         ))}
                       </div>
 
-                      <div>
-                        <label className="block text-xs font-medium text-slate-400 mb-2">Enter UPI ID (VPA)</label>
-                        <input
-                          type="text"
-                          value={upiVpa}
-                          onChange={(e) => setUpiVpa(e.target.value)}
-                          className="w-full px-4 py-2 text-sm bg-slate-800 border border-slate-700 text-slate-200 rounded-lg outline-hidden focus:border-slate-500 transition-colors"
-                        />
+                      <div className="p-3 rounded-lg bg-emerald-900/10 border border-emerald-500/20 text-xs text-emerald-400 flex items-center justify-between font-medium">
+                        <span className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                          <span>Direct UPI Intent & Dynamic QR Code Powered by ZapUPI</span>
+                        </span>
+                        <span className="font-mono font-bold tracking-wider text-[11px] bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">0% Surcharge</span>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* 2. Test Cards */}
+                {/* 2. Cash on Delivery (COD) */}
                 <div
-                  onClick={() => setPaymentMethod('razorpay_card')}
+                  onClick={() => setPaymentMethod('cod')}
                   className={`p-4 rounded-xl border transition-all cursor-pointer ${
-                    paymentMethod === 'razorpay_card'
-                      ? 'border-slate-500 bg-slate-800/50'
-                      : 'border-slate-700/50 bg-transparent hover:border-slate-600'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <CreditCard className={`w-5 h-5 ${paymentMethod === 'razorpay_card' ? 'text-slate-200' : 'text-slate-500'}`} />
-                      <div>
-                        <div className="text-sm font-medium text-slate-200">Credit / Debit Card</div>
-                        <div className="text-xs text-slate-500 mt-0.5">Visa, Mastercard, RuPay, Maestro</div>
-                      </div>
-                    </div>
-                    <input
-                      type="radio"
-                      checked={paymentMethod === 'razorpay_card'}
-                      onChange={() => setPaymentMethod('razorpay_card')}
-                      className="accent-slate-200 w-4 h-4"
-                    />
-                  </div>
-
-                  {paymentMethod === 'razorpay_card' && (
-                    <div className="pt-4 mt-2 border-t border-slate-700/50 space-y-4">
-                      <div className="p-3 rounded-lg bg-emerald-900/10 border border-emerald-500/20 text-xs text-emerald-500 flex items-center justify-between font-medium">
-                        <span>Test Card pre-loaded</span>
-                        <span className="font-mono font-bold tracking-wider">OTP: 123456</span>
-                      </div>
-                      <div>
-                        <label className="block font-medium text-slate-400 mb-2 text-xs">Card Number</label>
-                        <input
-                          type="text"
-                          value={cardNumber}
-                          onChange={(e) => setCardNumber(e.target.value)}
-                          className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono text-sm outline-hidden focus:border-slate-500 transition-colors"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block font-medium text-slate-400 mb-2 text-xs">Expiry Date</label>
-                          <input
-                            type="text"
-                            value={cardExpiry}
-                            onChange={(e) => setCardExpiry(e.target.value)}
-                            className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono text-sm outline-hidden focus:border-slate-500 transition-colors"
-                          />
-                        </div>
-                        <div>
-                          <label className="block font-medium text-slate-400 mb-2 text-xs">CVV</label>
-                          <input
-                            type="password"
-                            maxLength={4}
-                            value={cardCvv}
-                            onChange={(e) => setCardCvv(e.target.value)}
-                            className="w-full px-4 py-2 bg-slate-800 border border-slate-700 text-slate-200 rounded-lg font-mono text-sm outline-hidden focus:border-slate-500 transition-colors"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* 3. Netbanking */}
-                <div
-                  onClick={() => setPaymentMethod('razorpay_netbanking')}
-                  className={`p-4 rounded-xl border transition-all cursor-pointer ${
-                    paymentMethod === 'razorpay_netbanking'
+                    paymentMethod === 'cod'
                       ? 'border-slate-500 bg-slate-800/50'
                       : 'border-slate-700/50 bg-transparent hover:border-slate-600'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Building className={`w-5 h-5 ${paymentMethod === 'razorpay_netbanking' ? 'text-slate-200' : 'text-slate-500'}`} />
+                      <Truck className={`w-5 h-5 ${paymentMethod === 'cod' ? 'text-slate-200' : 'text-slate-500'}`} />
                       <div>
-                        <div className="text-sm font-medium text-slate-200">Netbanking</div>
-                        <div className="text-xs text-slate-500 mt-0.5">HDFC, ICICI, SBI, Axis, Kotak</div>
+                        <div className="text-sm font-medium text-slate-200">Cash on Delivery (COD)</div>
+                        <div className="text-xs text-slate-500 mt-0.5">Pay via cash or UPI QR upon doorstep delivery</div>
                       </div>
                     </div>
                     <input
                       type="radio"
-                      checked={paymentMethod === 'razorpay_netbanking'}
-                      onChange={() => setPaymentMethod('razorpay_netbanking')}
+                      checked={paymentMethod === 'cod'}
+                      onChange={() => setPaymentMethod('cod')}
                       className="accent-slate-200 w-4 h-4"
                     />
                   </div>
@@ -560,7 +459,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                   className="w-full py-3.5 px-4 rounded-xl bg-slate-100 hover:bg-white text-slate-900 font-semibold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <Lock className="w-4 h-4" />
-                  <span>Pay {formatINR(total)}</span>
+                  <span>{paymentMethod === 'cod' ? `Place COD Order (${formatINR(total)})` : `Pay with ZapUPI (${formatINR(total)})`}</span>
                 </button>
                 <p className="text-[10px] text-center text-slate-500 mt-3 font-medium">
                   By continuing, you agree to Bazaaro's Terms of Service and Privacy Policy.

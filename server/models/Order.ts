@@ -35,8 +35,6 @@ export interface IOrder extends Document {
   address: IOrderAddress;
   paymentMethod: string;
   paymentId: string;
-  razorpayOrderId?: string;
-  razorpaySignature?: string;
   zapupiOrderId?: string;
   zapupiTxnId?: string;
   utr?: string;
@@ -134,13 +132,6 @@ const OrderSchema = new Schema<IOrder>(
       type: String,
       required: true,
       index: true,
-    },
-    razorpayOrderId: {
-      type: String,
-      index: true,
-    },
-    razorpaySignature: {
-      type: String,
     },
     zapupiOrderId: {
       type: String,

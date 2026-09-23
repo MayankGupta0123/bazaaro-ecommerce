@@ -42,7 +42,7 @@ app.get('/api/health', (_req: Request, res: Response) => {
     currency: 'INR',
     region: 'India',
     hasGeminiKey: Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY'),
-    hasRazorpayKey: Boolean(process.env.RAZORPAY_KEY_ID || process.env.ZAPUPI_KEY_ID),
+    hasZapUpiKey: Boolean(process.env.ZAPUPI_KEY_ID),
     hasDatabaseConnection: isDbConnected(),
     databaseStatus: isDbConnected() ? 'connected' : 'disconnected (set MONGODB_URI in .env)',
   });
