@@ -78,7 +78,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     orderId: string;
     gatewayNotice?: string | null;
   } | null>(null);
-  const [enteredVpa, setEnteredVpa] = useState('rahul@okhdfcbank');
+  const [enteredUtr, setEnteredUtr] = useState('');
   const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
   const [copiedVpa, setCopiedVpa] = useState(false);
 
@@ -96,8 +96,15 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   const handleConfirmUpiPayment = async () => {
     if (!pendingOrder || !token) return;
-    setIsVerifyingPayment(true);
     setCheckoutError(null);
+
+    const cleanedUtr = enteredUtr.trim().replace(/\D/g, '');
+    if (cleanedUtr.length !== 12) {
+      setCheckoutError('Please enter the valid 12-digit Bank UTR / Reference Number from your payment app receipt (Google Pay, PhonePe, Paytm).');
+      return;
+    }
+
+    setIsVerifyingPayment(true);
 
     try {
       const res = await fetch('/api/payment/confirm-payment', {
@@ -108,13 +115,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         },
         body: JSON.stringify({
           orderId: pendingOrder.id,
-          upiVpa: enteredVpa.trim(),
+          utr: cleanedUtr,
         }),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        setCheckoutError(data.error || 'Failed to verify UPI payment. Please try again.');
+        setCheckoutError(data.error || 'Failed to verify payment reference.');
         setIsVerifyingPayment(false);
         return;
       }
@@ -122,9 +129,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       const serverOrder = data.order || pendingOrder;
       const confirmedOrder: Order = {
         ...pendingOrder,
-        paymentStatus: 'paid',
-        status: 'Confirmed',
-        paymentId: serverOrder.zapupiTxnId || serverOrder.paymentId || `ZU_${Date.now().toString(36).toUpperCase()}`,
+        paymentStatus: data.isPaid ? 'paid' : 'pending',
+        status: data.isPaid ? 'Confirmed' : 'Placed',
+        paymentId: serverOrder.zapupiTxnId || serverOrder.paymentId || `UTR_${cleanedUtr}`,
+        utr: cleanedUtr,
         zapupiTxnId: serverOrder.zapupiTxnId,
       };
 
@@ -132,7 +140,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       onOrderPlaced(confirmedOrder);
       setStep('success');
     } catch (err: any) {
-      setCheckoutError(err.message || 'Error confirming payment');
+      setCheckoutError(err.message || 'Error processing payment confirmation');
     } finally {
       setIsVerifyingPayment(false);
     }
@@ -240,13 +248,20 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         return;
       }
 
-      const fallbackQr = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(`upi://pay?pa=bazaaro.pay@zapupi&pn=Bazaaro&am=${formattedOrder.total}&cu=INR&tn=${formattedOrder.id}`)}`;
-      const fallbackIntent = `upi://pay?pa=bazaaro.pay@zapupi&pn=Bazaaro&am=${formattedOrder.total}&cu=INR&tn=${formattedOrder.id}`;
+      if (payData.isLiveGateway && payData.paymentUrl) {
+        window.location.href = payData.paymentUrl;
+        return;
+      }
+
+      const defaultVpa = payData.upiVpa || '8287998100@yapl';
+      const payeeName = 'Mayank Gupta';
+      const fallbackQr = `https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${encodeURIComponent(`upi://pay?pa=${encodeURIComponent(defaultVpa)}&pn=${encodeURIComponent(payeeName)}&am=${formattedOrder.total.toFixed(2)}&cu=INR&tn=${encodeURIComponent(formattedOrder.id)}`)}`;
+      const fallbackIntent = `upi://pay?pa=${encodeURIComponent(defaultVpa)}&pn=${encodeURIComponent(payeeName)}&am=${formattedOrder.total.toFixed(2)}&cu=INR&tn=${encodeURIComponent(formattedOrder.id)}`;
 
       setUpiData({
         qrCodeUrl: payData.qrCodeUrl || fallbackQr,
         upiIntentUrl: payData.upiIntentUrl || fallbackIntent,
-        upiVpa: payData.upiVpa || 'bazaaro.pay@zapupi',
+        upiVpa: defaultVpa,
         isLiveGateway: Boolean(payData.isLiveGateway),
         paymentUrl: payData.paymentUrl || null,
         amount: formattedOrder.total,
@@ -638,52 +653,50 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 </div>
               </div>
 
-              {/* Enter UPI ID (VPA) */}
-              <div className="p-4 rounded-xl bg-slate-800/30 border border-slate-700/50 space-y-3">
-                <label className="block text-xs font-semibold text-slate-300">
-                  Or Enter Your UPI ID (VPA)
-                </label>
+              {/* Step 2: Enter 12-Digit Bank UTR / Reference ID */}
+              <div className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-slate-200">
+                    Step 2: Enter 12-Digit Bank UTR / Reference No.
+                  </label>
+                  <span className="text-[11px] font-mono text-emerald-400">
+                    {enteredUtr.length}/12 digits
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  After completing payment in Google Pay, PhonePe, or Paytm, copy the 12-digit <strong>UPI Ref No. / UTR</strong> from your transaction receipt and enter it here:
+                </p>
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="e.g. rahul@okhdfcbank"
-                    value={enteredVpa}
-                    onChange={(e) => setEnteredVpa(e.target.value)}
-                    className="flex-1 px-3.5 py-2.5 bg-slate-800/80 border border-slate-700 text-slate-200 rounded-xl text-xs outline-hidden focus:border-slate-500 transition-colors"
+                    inputMode="numeric"
+                    maxLength={12}
+                    placeholder="e.g. 408712345678"
+                    value={enteredUtr}
+                    onChange={(e) => setEnteredUtr(e.target.value.replace(/\D/g, ''))}
+                    className="flex-1 px-3.5 py-2.5 bg-slate-900/90 border border-slate-700 text-slate-100 rounded-xl text-xs font-mono tracking-wider outline-hidden focus:border-emerald-500 transition-colors"
                   />
                   <button
                     type="button"
                     onClick={handleConfirmUpiPayment}
-                    disabled={isVerifyingPayment || !enteredVpa.trim()}
-                    className="px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-xl text-xs font-semibold transition-colors cursor-pointer shrink-0 disabled:opacity-50"
+                    disabled={isVerifyingPayment || enteredUtr.length !== 12}
+                    className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs transition-colors cursor-pointer shrink-0 disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-emerald-500/10"
                   >
-                    Verify & Pay
+                    {isVerifyingPayment ? (
+                      <span className="flex items-center gap-1.5">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        Verifying...
+                      </span>
+                    ) : (
+                      'Verify & Confirm'
+                    )}
                   </button>
                 </div>
-              </div>
-
-              {/* Primary Confirmation Action */}
-              <div className="pt-2 space-y-2">
-                <button
-                  onClick={handleConfirmUpiPayment}
-                  disabled={isVerifyingPayment}
-                  className="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-emerald-500/20 disabled:opacity-60"
-                >
-                  {isVerifyingPayment ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Verifying Payment Status...</span>
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>I Have Paid &bull; Confirm Order</span>
-                    </>
-                  )}
-                </button>
-                <p className="text-[10px] text-center text-slate-400">
-                  Click after completing the UPI transaction in your payment app.
-                </p>
+                {checkoutError && (
+                  <p className="text-[11px] text-rose-400 bg-rose-500/10 border border-rose-500/20 px-3 py-2 rounded-lg">
+                    {checkoutError}
+                  </p>
+                )}
               </div>
             </div>
           )}
