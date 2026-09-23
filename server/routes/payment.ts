@@ -16,6 +16,9 @@ router.get('/config', (_req: Request, res: Response) => {
     gateway: 'ZapUPI',
     currency: 'INR',
     mode: process.env.ZAPUPI_KEY_ID ? 'configured' : 'unconfigured',
+    paymentMode: 'cashier',
+    cashierId: process.env.ZAPUPI_CASHIER_ID || '3791',
+    serverGatewayIp: process.env.ZAPUPI_GATEWAY_IP || '72.61.225.127',
     supportedMethods: ['upi', 'qr', 'intent', 'gpay', 'phonepe', 'paytm'],
   });
 });
@@ -81,12 +84,14 @@ router.post('/create-order', authenticateToken, async (req: AuthenticatedRequest
     const webhookUrl = `${publicBaseUrl}/api/payment/webhook`;
 
     // 6. Call ZapUPI API from backend
+    const cashierId = process.env.ZAPUPI_CASHIER_ID || '3791';
     const zapResult = await createZapUpiOrder({
       orderId: zapupiOrderId,
       amount: orderTotal,
       customerMobile: order.address?.phone,
       remark: `Bazaaro | ${order.userId} | ${order.orderId}`,
       webhookUrl,
+      cashierId,
     });
 
     const isLiveGateway = Boolean(zapResult.success && zapResult.paymentUrl);
@@ -200,6 +205,10 @@ router.post('/webhook', async (req: Request, res: Response) => {
     if (!order_id) {
       return res.status(400).json({ error: 'Missing order_id in webhook payload' });
     }
+
+    const clientIp = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').toString();
+    const gatewayIp = process.env.ZAPUPI_GATEWAY_IP || '72.61.225.127';
+    console.log(`[ZapUPI Webhook] Received webhook notification for order ${order_id} from IP: ${clientIp} (Expected Gateway IP: ${gatewayIp})`);
 
     // 1. Locate the Bazaaro order in MongoDB
     const order = await Order.findOne({

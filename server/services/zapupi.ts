@@ -11,6 +11,7 @@ export interface CreateZapUpiOrderParams {
   customerMobile?: string;
   remark?: string;
   webhookUrl: string;
+  cashierId?: string | number;
 }
 
 export interface CreateZapUpiOrderResult {
@@ -53,6 +54,7 @@ export async function createZapUpiOrder(
   params: CreateZapUpiOrderParams
 ): Promise<CreateZapUpiOrderResult> {
   const zapKey = getZapKey();
+  const cashierId = params.cashierId || process.env.ZAPUPI_CASHIER_ID || '3791';
 
   const formattedAmount = Number(params.amount).toFixed(2);
   const payload = {
@@ -62,6 +64,8 @@ export async function createZapUpiOrder(
     customer_mobile: params.customerMobile ? params.customerMobile.replace(/\D/g, '').slice(-10) : undefined,
     remark: params.remark || `Bazaaro | ${params.orderId}`,
     webhook_url: params.webhookUrl,
+    cashier_id: cashierId,
+    payment_mode: 'cashier',
   };
 
   try {
