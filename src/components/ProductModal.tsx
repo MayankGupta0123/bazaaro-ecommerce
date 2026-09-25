@@ -273,7 +273,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
             {/* Left: Gallery */}
             <div className="space-y-4">
-              <div className="aspect-4/3 rounded-2xl bg-[#F5F5F7] p-8 flex items-center justify-center relative overflow-hidden">
+              <div className="aspect-4/3 rounded-2xl bg-[#F5F5F7] p-8 flex items-center justify-center relative overflow-hidden isolate">
                 <img
                   src={product.images[selectedImageIndex] || product.images[0]}
                   alt={product.name}
@@ -297,7 +297,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                     <button
                       key={idx}
                       onClick={() => setSelectedImageIndex(idx)}
-                      className={`w-16 h-16 rounded-xl border p-1 overflow-hidden transition-all cursor-pointer bg-white ${
+                      className={`w-16 h-16 rounded-xl border p-1 overflow-hidden transition-all cursor-pointer bg-white isolate ${
                         selectedImageIndex === idx ? 'border-slate-800 shadow-sm' : 'border-slate-200 hover:border-slate-400 opacity-70 hover:opacity-100'
                       }`}
                     >

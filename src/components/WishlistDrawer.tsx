@@ -58,12 +58,14 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({
                 key={prod.id}
                 className="p-3 rounded-xl border border-transparent hover:border-slate-700 bg-slate-800/20 flex items-center gap-4 transition-colors"
               >
-                <img
-                  src={prod.images[0]}
-                  alt={prod.name}
-                  referrerPolicy="no-referrer"
-                  className="w-20 h-20 object-contain rounded-xl bg-[#F5F5F7] mix-blend-multiply p-2 shrink-0"
-                />
+                <div className="w-20 h-20 shrink-0 rounded-xl bg-white flex items-center justify-center p-2 overflow-hidden shadow-xs border border-slate-700/40">
+                  <img
+                    src={prod.images[0]}
+                    alt={prod.name}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[10px] uppercase font-semibold text-slate-400 mb-1 tracking-wider">{prod.brand}</div>
                   <div className="text-sm font-semibold text-slate-200 truncate mb-1">{prod.name}</div>

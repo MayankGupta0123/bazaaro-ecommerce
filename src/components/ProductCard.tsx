@@ -58,7 +58,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Image container - neutral background */}
       <div
         onClick={() => onSelectProduct(product)}
-        className="cursor-pointer relative aspect-4/3 bg-[#F5F5F7] m-1.5 rounded-xl overflow-hidden flex items-center justify-center p-6"
+        className="cursor-pointer relative aspect-4/3 bg-[#F5F5F7] m-1.5 rounded-xl overflow-hidden flex items-center justify-center p-6 isolate"
       >
         <img
           src={product.images[0]}

@@ -230,12 +230,14 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                          key={prod.id}
                          className="p-3 rounded-xl bg-slate-800/30 border border-slate-700/50 flex items-center gap-3 hover:border-slate-600 transition-colors"
                        >
-                         <img
-                           src={prod.images[0]}
-                           alt={prod.name}
-                           referrerPolicy="no-referrer"
-                           className="w-14 h-14 object-contain rounded-xl bg-[#F5F5F7] mix-blend-multiply p-2 shrink-0"
-                         />
+                         <div className="w-14 h-14 shrink-0 rounded-xl bg-white flex items-center justify-center p-1.5 overflow-hidden shadow-xs border border-slate-700/40">
+                           <img
+                             src={prod.images[0]}
+                             alt={prod.name}
+                             referrerPolicy="no-referrer"
+                             className="w-full h-full object-contain"
+                           />
+                         </div>
                          <div className="flex-1 min-w-0">
                            <div className="text-xs font-semibold text-slate-200 truncate mb-1">
                              {prod.name}

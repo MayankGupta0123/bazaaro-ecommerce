@@ -116,12 +116,14 @@ export const OrdersModal: React.FC<OrdersModalProps> = ({
                 <div className="space-y-3">
                   {order.items.map((item) => (
                     <div key={item.product.id} className="flex items-center gap-4 text-sm">
-                      <img
-                        src={item.product.images[0]}
-                        alt={item.product.name}
-                        referrerPolicy="no-referrer"
-                        className="w-16 h-16 object-contain rounded-xl bg-[#F5F5F7] mix-blend-multiply p-2 border border-slate-200/10 shrink-0"
-                      />
+                      <div className="w-16 h-16 shrink-0 rounded-xl bg-white flex items-center justify-center p-1.5 overflow-hidden shadow-xs border border-slate-700/40">
+                        <img
+                          src={item.product.images[0]}
+                          alt={item.product.name}
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-slate-200 truncate mb-1">{item.product.name}</div>
                         <div className="text-xs text-slate-400">
