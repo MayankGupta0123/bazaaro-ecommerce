@@ -26,3 +26,82 @@
     background: var(--color-bazaaro-cyan);
   }
 }
+
+/* Continuously running Bazaaro logo animations */
+@keyframes bazaaro-logo-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(2px) rotate(1.5deg);
+  }
+}
+
+@keyframes bazaaro-logo-glow {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(0.9);
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.15);
+    filter: blur(12px);
+  }
+}
+
+@keyframes bazaaro-logo-shimmer {
+  0% {
+    transform: translateX(-160%) skewX(-20deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  35% {
+    transform: translateX(200%) skewX(-20deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(200%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+.animate-bazaaro-float {
+  animation: bazaaro-logo-float 3.6s ease-in-out infinite;
+}
+
+.animate-bazaaro-glow {
+  animation: bazaaro-logo-glow 2.8s ease-in-out infinite;
+}
+
+.animate-bazaaro-shimmer {
+  animation: bazaaro-logo-shimmer 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.bazaaro-logo-mask {
+  mask-image: url('/bazaaro-logo.png');
+  -webkit-mask-image: url('/bazaaro-logo.png');
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bazaaro-float,
+  .animate-bazaaro-glow,
+  .animate-bazaaro-shimmer {
+    animation: none !important;
+  }
+}
+
