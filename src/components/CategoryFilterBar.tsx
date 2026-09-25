@@ -102,8 +102,8 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
                   onClick={() => handleBrandSelect(brand)}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer border ${
                     isSelected
-                      ? 'bg-slate-100 text-slate-900 border-slate-100'
-                      : 'bg-transparent text-slate-400 hover:text-slate-200 border-slate-700 hover:border-slate-500'
+                      ? 'bg-slate-100 text-slate-950 border-slate-100 font-semibold'
+                      : 'bg-bazaaro-surface/80 text-slate-400 hover:text-slate-200 border-bazaaro-border hover:border-slate-600'
                   }`}
                 >
                   {brand}
@@ -117,8 +117,8 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
             onClick={() => onFilterChange({ ...filters, onlyMadeInIndia: !filters.onlyMadeInIndia })}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
               filters.onlyMadeInIndia
-                ? 'bg-slate-800 border-slate-600 text-slate-200'
-                : 'bg-transparent border-slate-700 text-slate-400 hover:text-slate-200 hover:border-slate-500'
+                ? 'bg-bazaaro-surface border-slate-500 text-slate-100'
+                : 'bg-bazaaro-surface/50 border-bazaaro-border text-slate-400 hover:text-slate-200 hover:border-slate-600'
             }`}
           >
             <span className="text-[10px]">🇮🇳</span>

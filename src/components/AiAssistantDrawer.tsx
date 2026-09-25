@@ -148,12 +148,12 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-md flex justify-end">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/80 backdrop-blur-md flex justify-end">
       <div className="w-full max-w-md bg-bazaaro-surface h-full shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-300 border-l border-slate-700/50">
         {/* Header */}
         <div className="px-6 py-5 border-b border-slate-700/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
+            <div className="w-10 h-10 rounded-full bg-bazaaro-dark border border-bazaaro-border/80 flex items-center justify-center text-cyan-400">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
@@ -194,7 +194,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                 className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
               >
                 {!isUser && (
-                  <div className="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center shrink-0 mt-1">
+                  <div className="w-8 h-8 rounded-full bg-bazaaro-dark border border-bazaaro-border/80 text-cyan-400 flex items-center justify-center shrink-0 mt-1">
                     <Bot className="w-4 h-4" />
                   </div>
                 )}
@@ -204,7 +204,7 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
                     className={`p-4 rounded-2xl text-sm leading-relaxed ${
                       isUser
                         ? 'bg-slate-700 text-slate-100 rounded-br-sm'
-                        : 'bg-slate-800/50 text-slate-300 border border-slate-700/50 rounded-bl-sm'
+                        : 'bg-bazaaro-dark/90 text-slate-300 border border-bazaaro-border/80 rounded-bl-sm'
                     }`}
                   >
                     <div className="whitespace-pre-line">

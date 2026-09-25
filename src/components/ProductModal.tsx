@@ -242,7 +242,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   const currentDisplayCount = stats?.totalReviews ?? product.reviewCount;
 
   return (
-    <div className="fixed inset-0 z-50 bg-bazaaro-dark/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
       <div className="bg-bazaaro-surface rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-700/50 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/50">

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bazaaro-dark: #0B0D0F;
-  --color-bazaaro-surface: #121518;
-  --color-bazaaro-surface-hover: #181C20;
-  --color-bazaaro-border: #262A2E;
+  --color-bazaaro-dark: #020305;
+  --color-bazaaro-surface: #080B10;
+  --color-bazaaro-surface-hover: #0E121A;
+  --color-bazaaro-border: #161B24;
   --color-bazaaro-cyan: #5EEAD4;
   --color-bazaaro-violet: #A78BFA;
 }

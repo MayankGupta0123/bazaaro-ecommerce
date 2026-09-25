@@ -19,7 +19,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onSelectProduct,
 }) => {
   return (
-    <div className="group bg-bazaaro-surface rounded-2xl border border-transparent hover:border-slate-700 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden relative transform hover:-translate-y-1">
+    <div className="group bg-bazaaro-surface rounded-2xl border border-bazaaro-border/60 hover:border-slate-700/80 hover:shadow-[0_12px_30px_rgba(0,0,0,0.8)] transition-all duration-300 flex flex-col justify-between overflow-hidden relative transform hover:-translate-y-1">
       {/* Top badges */}
       <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5 items-start">
         {product.madeInIndia && (

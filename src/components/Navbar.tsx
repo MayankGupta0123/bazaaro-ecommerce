@@ -278,7 +278,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 value={tempPincode}
                 onChange={(e) => setTempPincode(e.target.value.replace(/\D/g, ''))}
                 placeholder="Enter 6-digit Pincode (e.g. 110001)"
-                className="w-full px-4 py-2 bg-[#0B0C10] border border-bazaaro-border rounded-lg focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 text-slate-200 outline-hidden font-mono tracking-widest text-center text-lg"
+                className="w-full px-4 py-2 bg-bazaaro-dark border border-bazaaro-border rounded-lg focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500 text-slate-200 outline-hidden font-mono tracking-widest text-center text-lg"
               />
               {pincodeError && <p className="text-rose-400 text-xs mt-1.5 font-medium">{pincodeError}</p>}
             </div>

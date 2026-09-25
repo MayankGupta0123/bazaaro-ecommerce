@@ -12,8 +12,8 @@ export const AdminAccessDenied: React.FC<AdminAccessDeniedProps> = ({
   onOpenAuth,
 }) => {
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-6 text-center font-sans">
-      <div className="max-w-md w-full p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
+    <div className="min-h-screen bg-bazaaro-dark text-white flex flex-col items-center justify-center p-6 text-center font-sans">
+      <div className="max-w-md w-full p-8 rounded-3xl bg-bazaaro-surface border border-bazaaro-border/80 shadow-2xl space-y-5 animate-in fade-in zoom-in-95">
         <div className="w-16 h-16 rounded-3xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center mx-auto shadow-inner">
           <ShieldAlert className="w-8 h-8" />
         </div>
@@ -26,7 +26,7 @@ export const AdminAccessDenied: React.FC<AdminAccessDeniedProps> = ({
           </p>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-700/50 text-[11px] text-slate-400 text-left space-y-1">
+        <div className="p-3.5 rounded-2xl bg-bazaaro-dark border border-bazaaro-border/60 text-[11px] text-slate-400 text-left space-y-1">
           <div className="flex items-center gap-1.5 font-bold text-slate-300">
             <Lock className="w-3.5 h-3.5 text-amber-400" />
             <span>Default Administrator Account:</span>

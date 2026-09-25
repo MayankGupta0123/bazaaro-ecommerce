@@ -24,7 +24,7 @@ export const OrdersModal: React.FC<OrdersModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
       <div className="bg-bazaaro-surface rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-700/50 overflow-hidden flex flex-col max-h-[85vh]">
         {/* Header */}
         <div className="px-6 py-5 border-b border-slate-700/50 flex items-center justify-between">
@@ -56,7 +56,7 @@ export const OrdersModal: React.FC<OrdersModalProps> = ({
             orders.map((order) => (
               <div
                 key={order.id}
-                className="p-5 rounded-xl border border-slate-700/50 bg-slate-800/20 space-y-5"
+                className="p-5 rounded-xl border border-bazaaro-border/80 bg-bazaaro-dark/80 space-y-5"
               >
                 {/* Order Top Bar */}
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-700/50">

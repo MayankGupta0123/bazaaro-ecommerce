@@ -43,7 +43,7 @@ export const AiDostFloatingButton: React.FC<AiDostFloatingButtonProps> = ({ onCl
         type="button"
         onClick={onClick}
         aria-label="Open Bazaaro AI Dost Shopping Assistant"
-        className="group relative flex items-center gap-2.5 pl-2.5 pr-3 py-1.5 w-[205px] sm:w-[225px] h-[52px] sm:h-[56px] rounded-2xl bg-gradient-to-r from-[#0e172a] via-[#111c34] to-[#0f1a30] hover:from-[#131f38] hover:via-[#162444] hover:to-[#14223f] border border-[rgba(70,190,255,0.32)] hover:border-[rgba(70,190,255,0.65)] ring-1 ring-white/10 shadow-[0_6px_24px_rgba(0,0,0,0.6),0_0_20px_rgba(30,144,255,0.2)] hover:shadow-[0_10px_32px_rgba(0,0,0,0.8),0_0_28px_rgba(30,144,255,0.32)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] transition-all duration-300 cursor-pointer overflow-hidden"
+        className="group relative flex items-center gap-2.5 pl-2.5 pr-3 py-1.5 w-[205px] sm:w-[225px] h-[52px] sm:h-[56px] rounded-2xl bg-gradient-to-r from-[#070b14] via-[#0a1224] to-[#070e1c] hover:from-[#0c1426] hover:via-[#0e1a34] hover:to-[#0d172c] border border-[rgba(70,190,255,0.32)] hover:border-[rgba(70,190,255,0.65)] ring-1 ring-white/10 shadow-[0_6px_24px_rgba(0,0,0,0.8),0_0_20px_rgba(30,144,255,0.2)] hover:shadow-[0_10px_32px_rgba(0,0,0,0.9),0_0_28px_rgba(30,144,255,0.32)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] transition-all duration-300 cursor-pointer overflow-hidden"
       >
         {/* Subtle glass shimmer glint on hover */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-300/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
@@ -54,7 +54,7 @@ export const AiDostFloatingButton: React.FC<AiDostFloatingButtonProps> = ({ onCl
           <span className="absolute -inset-1 rounded-full bg-cyan-500/25 blur-sm opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
 
           {/* Circular base */}
-          <div className="relative w-9 h-9 sm:w-9.5 sm:h-9.5 rounded-full bg-gradient-to-b from-[#182645] to-[#0d162b] border border-cyan-400/40 flex items-center justify-center shadow-inner">
+          <div className="relative w-9 h-9 sm:w-9.5 sm:h-9.5 rounded-full bg-gradient-to-b from-[#101b34] to-[#060a16] border border-cyan-400/40 flex items-center justify-center shadow-inner">
             {/* Friendly Line-Art Robot Mascot */}
             <svg
               className="w-5 h-5 text-cyan-200 transition-transform duration-300 group-hover:scale-105"

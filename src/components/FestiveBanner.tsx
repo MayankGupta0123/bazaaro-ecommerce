@@ -5,12 +5,12 @@ export const FestiveBanner: React.FC = () => {
     <div className="relative overflow-hidden bg-bazaaro-dark border-b border-bazaaro-border/60 pt-8 pb-8 sm:pt-11 sm:pb-10">
       {/* Very subtle ambient radial glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[600px] h-[600px] bg-cyan-900/10 rounded-full blur-[100px] opacity-25"></div>
+        <div className="w-[500px] h-[500px] bg-cyan-950/20 rounded-full blur-[120px] opacity-20"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center text-center">
         {/* Top badge with clear breathing room */}
-        <span className="inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full bg-slate-800/80 border border-slate-700/80 text-[11px] sm:text-xs font-medium text-slate-300 mb-3.5 tracking-wide shadow-xs">
+        <span className="inline-flex items-center gap-1.5 py-1 px-3.5 rounded-full bg-bazaaro-surface border border-bazaaro-border/80 text-[11px] sm:text-xs font-medium text-slate-300 mb-3.5 tracking-wide shadow-xs">
           Premium Modern Tech Marketplace
         </span>
         

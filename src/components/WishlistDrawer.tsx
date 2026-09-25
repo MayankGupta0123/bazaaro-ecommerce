@@ -21,7 +21,7 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-md flex justify-end">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/80 backdrop-blur-md flex justify-end">
       <div className="w-full max-w-md bg-bazaaro-surface h-full shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-300 border-l border-slate-700/50">
         {/* Header */}
         <div className="px-6 py-5 border-b border-slate-700/50 flex items-center justify-between">
@@ -56,7 +56,7 @@ export const WishlistDrawer: React.FC<WishlistDrawerProps> = ({
             wishlist.map((prod) => (
               <div
                 key={prod.id}
-                className="p-3 rounded-xl border border-transparent hover:border-slate-700 bg-slate-800/20 flex items-center gap-4 transition-colors"
+                className="p-3 rounded-xl border border-bazaaro-border/60 hover:border-slate-700 bg-bazaaro-dark/80 flex items-center gap-4 transition-colors"
               >
                 <div className="w-20 h-20 shrink-0 rounded-xl bg-white flex items-center justify-center p-2 overflow-hidden shadow-xs border border-slate-700/40">
                   <img

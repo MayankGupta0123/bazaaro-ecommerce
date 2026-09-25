@@ -12,12 +12,12 @@ import { BazaaroLogo } from './BazaaroLogo';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-slate-900 text-slate-300 border-t border-slate-800 pt-16 pb-8 mt-16">
+    <footer className="bg-bazaaro-dark text-slate-300 border-t border-bazaaro-border pt-16 pb-8 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Top Trust Features Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pb-12 border-b border-slate-800">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pb-12 border-b border-bazaaro-border/80">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-full bg-bazaaro-surface border border-bazaaro-border/70 flex items-center justify-center shrink-0">
               <Truck className="w-5 h-5 text-slate-300" />
             </div>
             <div>
@@ -27,7 +27,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-full bg-bazaaro-surface border border-bazaaro-border/70 flex items-center justify-center shrink-0">
               <ShieldCheck className="w-5 h-5 text-slate-300" />
             </div>
             <div>
@@ -37,7 +37,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-full bg-bazaaro-surface border border-bazaaro-border/70 flex items-center justify-center shrink-0">
               <RotateCcw className="w-5 h-5 text-slate-300" />
             </div>
             <div>
@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-full bg-bazaaro-surface border border-bazaaro-border/70 flex items-center justify-center shrink-0">
               <CreditCard className="w-5 h-5 text-slate-300" />
             </div>
             <div>
@@ -102,7 +102,7 @@ export const Footer: React.FC = () => {
             <h5 className="text-xs font-semibold uppercase tracking-wider text-slate-100">
               Payment Gateway
             </h5>
-            <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 text-xs space-y-2">
+            <div className="p-4 rounded-xl bg-bazaaro-surface border border-bazaaro-border/80 text-xs space-y-2">
               <div className="flex items-center justify-between text-slate-300">
                 <span>ZapUPI Mode:</span>
                 <span className="font-semibold text-slate-100">Test Simulation</span>
@@ -118,7 +118,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+        <div className="pt-6 border-t border-bazaaro-border/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
           <div>
             © {new Date().getFullYear()} Bazaaro. Final Year Project. All rights reserved.
           </div>

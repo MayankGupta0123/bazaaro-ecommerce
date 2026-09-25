@@ -76,7 +76,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-md flex justify-end">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/80 backdrop-blur-md flex justify-end">
       <div className="w-full max-w-md bg-bazaaro-surface h-full shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-300 border-l border-slate-700/50">
         {/* Header */}
         <div className="px-6 py-5 border-b border-slate-700/50 flex items-center justify-between">
@@ -131,7 +131,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               {items.map((item) => (
                 <div
                   key={item.product.id}
-                  className="p-3 rounded-xl border border-transparent hover:border-slate-700 bg-slate-800/20 flex gap-4 items-center transition-colors"
+                  className="p-3 rounded-xl border border-bazaaro-border/60 hover:border-slate-700 bg-bazaaro-dark/80 flex gap-4 items-center transition-colors"
                 >
                   <div className="w-20 h-20 shrink-0 rounded-xl bg-white flex items-center justify-center p-2 overflow-hidden shadow-xs border border-slate-700/40">
                     <img
@@ -192,7 +192,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             </div>
 
             {/* Coupon Code Box */}
-            <div className="p-4 rounded-xl bg-slate-800/30 border border-slate-700/50 space-y-3">
+            <div className="p-4 rounded-xl bg-bazaaro-dark/80 border border-bazaaro-border/80 space-y-3">
               <div className="flex items-center justify-between text-xs font-semibold text-slate-300">
                 <span className="flex items-center gap-2">
                   <Tag className="w-4 h-4 text-slate-400" />
@@ -223,11 +223,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                     placeholder="Enter code"
-                    className="flex-1 px-4 py-2 text-xs uppercase font-mono tracking-wider bg-slate-800 border border-slate-700 text-slate-200 rounded-lg outline-hidden focus:border-slate-500 transition-colors"
+                    className="flex-1 px-4 py-2 text-xs uppercase font-mono tracking-wider bg-bazaaro-dark border border-bazaaro-border text-slate-200 rounded-lg outline-hidden focus:border-cyan-500 transition-colors"
                   />
                   <button
                     onClick={() => handleApplyCoupon(couponInput)}
-                    className="px-4 py-2 bg-slate-700 hover:bg-slate-600 border border-slate-600 text-slate-200 font-semibold text-xs rounded-lg transition-colors cursor-pointer"
+                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs rounded-lg transition-colors cursor-pointer"
                   >
                     Apply
                   </button>
@@ -245,7 +245,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <button
                     key={code}
                     onClick={() => handleApplyCoupon(code)}
-                    className="text-[10px] px-2.5 py-1 rounded-md bg-slate-800 border border-slate-700 text-slate-400 hover:text-slate-200 hover:border-slate-500 font-mono transition-colors"
+                    className="text-[10px] px-2.5 py-1 rounded-md bg-bazaaro-dark border border-bazaaro-border text-slate-400 hover:text-slate-200 hover:border-slate-500 font-mono transition-colors"
                   >
                     {code}
                   </button>
@@ -254,7 +254,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             </div>
 
             {/* Bill Details */}
-            <div className="p-5 rounded-xl bg-slate-800/30 border border-slate-700/50 space-y-3 text-xs">
+            <div className="p-5 rounded-xl bg-bazaaro-dark/80 border border-bazaaro-border/80 space-y-3 text-xs">
               <div className="font-semibold text-slate-100 mb-2 text-sm">Order Summary</div>
               <div className="flex justify-between text-slate-400">
                 <span>Subtotal</span>
